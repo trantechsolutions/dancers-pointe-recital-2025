@@ -5,7 +5,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Dancer's Pointe Recital Search</title>
-  <link rel="manifest" href="resource/manifest.json" />
+  <link rel="manifest" href="manifest.json" />
   <link href="https://cdn.jsdelivr.net/npm/vuetify@3.3.8/dist/vuetify.min.css" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet" />
   <link href="https://cdn.jsdelivr.net/npm/@mdi/font@7.1.96/css/materialdesignicons.min.css" rel="stylesheet" />
@@ -20,6 +20,11 @@
       word-break: break-word !important;
       overflow-wrap: break-word !important;
       display: block !important;
+    }
+
+    .favorite-act {
+      border: 2px solid palevioletred !important;
+      background-color: pink;
     }
   </style>
 </head>
@@ -54,13 +59,20 @@
                         mdi-star
                       </v-icon>
                     </v-list-item-title>
+
                     <v-list-item-subtitle class="subtitle-wrap">
-                      <span v-for="(act, i) in fav.acts" :key="act.number">
-                        #{{ act.number }} — {{ act.title }}<span v-if="i < fav.acts.length - 1"><br /></span>
-                      </span>
+                      <template v-if="fav.missing">
+                        <em class="text-error">Not in this show</em>
+                      </template>
+                      <template v-else>
+                        <span v-for="(act, i) in fav.acts" :key="i">
+                          #{{ act.number }} — {{ act.title }}<span v-if="i < fav.acts.length - 1"><br /></span>
+                        </span>
+                      </template>
                     </v-list-item-subtitle>
                   </v-list-item-content>
                 </v-list-item>
+
                 <div v-if="favorites.size === 0">No favorites added yet.</div>
               </v-list>
             </v-expansion-panel-text>
@@ -94,35 +106,27 @@
 
         </v-list>
 
-        <!-- Full Program Table -->
+        <!-- Entire Program Display -->
         <div v-if="showData" class="mt-6">
           <h2>Entire Program</h2>
-          <table class="table-bordered">
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>Title</th>
-                <th>Performers</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="(act, i) in showData.acts" :key="act.number + i">
-                <td>{{ act.number }}</td>
-                <td>{{ act.title }}</td>
-                <td class="text-small">
-                  <span v-for="(name, i) in act.performers" :key="i">
-                    {{ name }}<span v-if="i < act.performers.length - 1">, </span>
-                  </span>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+
+          <v-card v-for="(act, i) in showData.acts" :key="act.number + i" class="mb-3 pa-3" elevation="1" :class="{ 'favorite-act': act.performers.some(p => isFavorite(p)) }">
+            <div class="text-sm font-weight-bold">{{ act.number }} - {{ act.title }}</div>
+            <div class="text-caption mt-1">
+              <strong>Performers:</strong><br />
+              <span v-for="(name, j) in act.performers" :key="j">
+                {{ name }}<span v-if="j < act.performers.length - 1">, </span>
+              </span>
+            </div>
+          </v-card>
         </div>
+  </div>
 
 
-      </v-container>
 
-    </v-app>
+  </v-container>
+
+  </v-app>
   </div>
 
   <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
@@ -165,19 +169,14 @@
 
 
         // Load favorites for a given show from localStorage
-        function loadFavorites(showKey) {
-          if (!showKey) {
-            favorites.value = new Set();
-            return;
-          }
-          const stored = localStorage.getItem(`favorites_${showKey}`);
+        function loadFavorites() {
+          const stored = localStorage.getItem(`favorites_global`);
           favorites.value = new Set(JSON.parse(stored || '[]'));
         }
 
         // Save favorites for current show to localStorage
         function saveFavorites() {
-          if (!selectedShow.value) return;
-          localStorage.setItem(`favorites_${selectedShow.value}`, JSON.stringify([...favorites.value]));
+          localStorage.setItem(`favorites_global`, JSON.stringify([...favorites.value]));
         }
 
         // When selectedShow changes: clear search, load show data & favorites
@@ -195,7 +194,7 @@
           error.value = null;
 
           // Load favorites for this show
-          loadFavorites(val);
+          loadFavorites();
 
           try {
             const response = await fetch(`resource/${val}.json`);
@@ -247,16 +246,25 @@
         // Compute favorite dancers with acts for current show
         const favoriteResults = computed(() => {
           if (!showData.value) return [];
-          const map = {};
+
+          const inShowMap = {};
+          const allPerformers = new Set();
+
+          // Collect who is in the current show
           showData.value.acts.forEach(act => {
             act.performers.forEach(name => {
-              if (favorites.value.has(name)) {
-                if (!map[name]) map[name] = [];
-                map[name].push({ number: act.number, title: act.title });
-              }
+              allPerformers.add(name);
+              if (!inShowMap[name]) inShowMap[name] = [];
+              inShowMap[name].push({ number: act.number, title: act.title });
             });
+          });// For each favorite (globally), show info or mark missing
+          return [...favorites.value].map(name => {
+            if (allPerformers.has(name)) {
+              return { name, acts: inShowMap[name], missing: false };
+            } else {
+              return { name, acts: [], missing: true };
+            }
           });
-          return Object.entries(map).map(([name, acts]) => ({ name, acts }));
         });
 
         return {
@@ -284,7 +292,6 @@
         .then(() => console.log('Service Worker Registered'));
     }
   </script>
-
 
 </body>
 
