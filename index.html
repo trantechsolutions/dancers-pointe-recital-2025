@@ -40,7 +40,43 @@
 
         <v-alert type="error" v-if="error">{{ error }}</v-alert>
 
-        <v-divider v-if="selectedShow != ''" class="mb-4"></v-divider>
+        <v-divider v-if="selectedShow" class="mb-4"></v-divider>
+        <!-- Favorites Accordion -->
+        <v-expansion-panels multiple v-if="selectedShow">
+          <v-expansion-panel>
+            <v-expansion-panel-title>
+              My Favorites ({{ favorites.size }})
+            </v-expansion-panel-title>
+            <v-expansion-panel-text>
+              <v-list two-lines>
+                <v-list-item v-for="fav in favoriteResults" :key="fav.name">
+                  <v-list-item-content>
+                    <v-list-item-title class="d-flex justify-space-between align-center">
+                      {{ fav.name }}
+                      <v-icon color="amber" @click="toggleFavorite(fav.name)" style="cursor: pointer;"
+                        title="Remove from favorites">
+                        mdi-star
+                      </v-icon>
+                    </v-list-item-title>
+
+                    <v-list-item-subtitle class="subtitle-wrap">
+                      <template v-if="fav.missing">
+                        <em class="text-error">Not in this show</em>
+                      </template>
+                      <template v-else>
+                        <span v-for="(act, i) in fav.acts" :key="i">
+                          #{{ act.number }} — {{ act.title }}<span v-if="i < fav.acts.length - 1"><br /></span>
+                        </span>
+                      </template>
+                    </v-list-item-subtitle>
+                  </v-list-item-content>
+                </v-list-item>
+
+                <div v-if="favorites.size === 0">No favorites added yet.</div>
+              </v-list>
+            </v-expansion-panel-text>
+          </v-expansion-panel>
+        </v-expansion-panels>
 
         <div v-touch="onSwipe">
           <!-- PROGRAM VIEW -->
@@ -63,43 +99,6 @@
           </div>
           <!-- SEARCH VIEW -->
           <div v-else-if="activeTab === 'search'" class="tab-view">
-
-            <!-- Favorites Accordion -->
-            <v-expansion-panels multiple>
-              <v-expansion-panel>
-                <v-expansion-panel-title>
-                  My Favorites ({{ favorites.size }})
-                </v-expansion-panel-title>
-                <v-expansion-panel-text>
-                  <v-list two-lines>
-                    <v-list-item v-for="fav in favoriteResults" :key="fav.name">
-                      <v-list-item-content>
-                        <v-list-item-title class="d-flex justify-space-between align-center">
-                          {{ fav.name }}
-                          <v-icon color="amber" @click="toggleFavorite(fav.name)" style="cursor: pointer;"
-                            title="Remove from favorites">
-                            mdi-star
-                          </v-icon>
-                        </v-list-item-title>
-
-                        <v-list-item-subtitle class="subtitle-wrap">
-                          <template v-if="fav.missing">
-                            <em class="text-error">Not in this show</em>
-                          </template>
-                          <template v-else>
-                            <span v-for="(act, i) in fav.acts" :key="i">
-                              #{{ act.number }} — {{ act.title }}<span v-if="i < fav.acts.length - 1"><br /></span>
-                            </span>
-                          </template>
-                        </v-list-item-subtitle>
-                      </v-list-item-content>
-                    </v-list-item>
-
-                    <div v-if="favorites.size === 0">No favorites added yet.</div>
-                  </v-list>
-                </v-expansion-panel-text>
-              </v-expansion-panel>
-            </v-expansion-panels>
 
             <v-text-field label="Search dancer" v-model="search" clearable outlined :loading="loading"
               :disabled="!selectedShow || loading" class="mt-3"></v-text-field>
@@ -298,12 +297,12 @@
         });
 
         function onSwipe(direction) {
-  if (direction === 'left' && activeTab.value === 'program') {
-    activeTab.value = 'search';
-  } else if (direction === 'right' && activeTab.value === 'search') {
-    activeTab.value = 'program';
-  }
-}
+          if (direction === 'left' && activeTab.value === 'program') {
+            activeTab.value = 'search';
+          } else if (direction === 'right' && activeTab.value === 'search') {
+            activeTab.value = 'program';
+          }
+        }
 
 
         return {
