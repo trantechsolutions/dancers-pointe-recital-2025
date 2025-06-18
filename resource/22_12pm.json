@@ -1,0 +1,738 @@
+{
+  "date": "June 22",
+  "time": "12pm",
+  "acts": [
+    {
+      "number": 1,
+      "title": "Fosse",
+      "performers": [
+        "Camryn Adams",
+        "Alyse Boteler",
+        "Emily Clouatre",
+        "Reese Clouatre",
+        "Brielle Dennis",
+        "Sage Dufrechou",
+        "Veronica Dupuy",
+        "Emma Groetsch",
+        "Avery Hotstream",
+        "Isabella Huang",
+        "Ella Hutchins",
+        "Jessi Kammer",
+        "Ava Kennedy",
+        "Sara Kuhn",
+        "Kate Matessino",
+        "Elise McEvers",
+        "Mackenzie Miller",
+        "Madeline Molina",
+        "Aubrey Moody",
+        "Theresa Ocampo",
+        "Anna Claire Occhipinti",
+        "Carolina Plaia",
+        "Lucy Salkeld",
+        "Stella Salkeld",
+        "Gracyn Sapp",
+        "Ava Truxillo",
+        "Katie Tuttle",
+        "Raegan Tuttle",
+        "Claire Willmott",
+        "Emma Willmott"
+      ]
+    },
+    {
+      "number": 2,
+      "title": "Lookee Lookee",
+      "performers": [
+        "Dancer’s Pointe Thrive Competition Team"
+      ]
+    },
+    {
+      "number": 3,
+      "title": "Mermaid Party",
+      "performers": [
+        "Maren Bernard",
+        "Charleigh Blakeman",
+        "Merriman Coniglio",
+        "Madeline Fay",
+        "Annie Hamil",
+        "Grayson Hodgins",
+        "Hazel Hood",
+        "Vaeda Legrand",
+        "Ellison Mackel",
+        "Catalina Marin",
+        "Josephine Marino",
+        "Sloane Rizzo",
+        "Amelia Rothwell",
+        "Valentina Scelfo",
+        "Lucie Sclafini"
+      ]
+    },
+    {
+      "number": 4,
+      "title": "Hit Me Up",
+      "performers": [
+        "Reese Azar",
+        "Paisley Brown",
+        "Kennedy Coleman",
+        "Katherine Dickey",
+        "Evyn Estorge",
+        "Lily Lakey",
+        "Clara Molina",
+        "Scarlett Vanderhooft",
+        "Abigail Johnson",
+        "Lola Jones"
+      ]
+    },
+    {
+      "number": 5,
+      "title": "Omen",
+      "performers": [
+        "Emory Brewer",
+        "Audrey Buchtel",
+        "Cameron Caldwell",
+        "Charlotte Cardwell",
+        "Marigny Carter",
+        "Lexa Dayries",
+        "Beatrice Devillier",
+        "Lily Fay",
+        "Avery Fleiner",
+        "Celia Fleiner",
+        "Addyson Geerken",
+        "Marigny Greer",
+        "Cecilia Louapre",
+        "Adele Martinez",
+        "Parker Plaisance",
+        "Layla Raymond"
+      ]
+    },
+    {
+      "number": 6,
+      "title": "Sailor Song",
+      "performers": [
+        "Cecilia Barber",
+        "Alyse Boteler",
+        "Lucinda Clay",
+        "Brielle Dennis",
+        "Avery Hotstream",
+        "Ella Hutchins",
+        "Jessi Kammer",
+        "Mallory L’Hoste",
+        "Megan L’Hoste",
+        "Madeline Molina",
+        "Beverly Morris",
+        "Olivia Mouton",
+        "Theresa Ocampo",
+        "Carolina Plaia",
+        "Victoria Williams",
+        "Claire Willmott",
+        "Emma Willmott"
+      ]
+    },
+    {
+      "number": 7,
+      "title": "The Lion Sleeps Tonight",
+      "performers": [
+        "Avery Amerland",
+        "Eliza Budden",
+        "Charlotte Burst",
+        "Abigail Fischer",
+        "Brynn Graffagnini",
+        "Margot Kepper",
+        "Parker Laws",
+        "Millie Leger",
+        "Charlotte Linn",
+        "Eleanor Mauldin",
+        "Emily Messina",
+        "Charlotte Quaintance",
+        "Mary Reeves",
+        "Clara Schneider",
+        "Sloane Sharpe",
+        "Phoebe Uddo",
+        "Emmy Ursin",
+        "Everett Wiley"
+      ]
+    },
+    {
+      "number": 8,
+      "title": "The Puppet Master",
+      "performers": [
+        "Dancer’s Pointe Thrive Competition Team"
+      ]
+    },
+    {
+      "number": 9,
+      "title": "Girl Scout Cheer",
+      "performers": [
+        "Charlotte Almerico",
+        "Lucy Cardwell",
+        "Aveline DeJean",
+        "Madeline Delerno",
+        "Leyrer Dietz",
+        "Mary Claire Hodes",
+        "Adelaide Johnson",
+        "Cassie Lecompte-Johnson",
+        "Ellie Kepper",
+        "Stella Rizzo",
+        "Isabella Scelfo",
+        "Eleanor Vorhaben",
+        "Caroline Woodroof"
+      ]
+    },
+    {
+      "number": 10,
+      "title": "Mystery Girl",
+      "performers": [
+        "Charlotte Arrieta",
+        "Violet DeJean",
+        "Ruthie Dueitt",
+        "Genevieve Johnson",
+        "Camille Laderer",
+        "Finley Mackel",
+        "Margot Murrell",
+        "Anastasia Navarette",
+        "Colette Riley",
+        "Sadie Rizzo"
+      ]
+    },
+    {
+      "number": 11,
+      "title": "Rockstar",
+      "performers": [
+        "Dancer’s Pointe Thrive Competition Team"
+      ]
+    },
+    {
+      "number": 12,
+      "title": "Clap Snap",
+      "performers": [
+        "Dancer’s Pointe Thrive Competition Team"
+      ]
+    },
+    {
+      "number": 13,
+      "title": "Kendrick",
+      "performers": [
+        "Camryn Adams",
+        "Alyse Boteler",
+        "Emily Clouatre",
+        "Brielle Dennis",
+        "Sage Dufrechou",
+        "Veronica Dupuy",
+        "Avery Hotstream",
+        "Isabella Huang",
+        "Ella Hutchins",
+        "Jessi Kammer",
+        "Ava Kennedy",
+        "Elise McEvers",
+        "Madeline Molina",
+        "Theresa Ocampo",
+        "Anna Claire Occhipinti",
+        "Carolina Plaia",
+        "Ava Truxillo",
+        "Claire Willmott",
+        "Emma Willmott"
+      ]
+    },
+    {
+      "number": 14,
+      "title": "I lived",
+      "performers": [
+        "Reese Clouatre",
+        "Emma Groetsch",
+        "Sara Kuhn",
+        "Kate Matessino",
+        "Aubrey Moody",
+        "Lucy Salkeld",
+        "Katie Tuttle"
+      ]
+    },
+    {
+      "number": 15,
+      "title": "Presentation of Senior Graduates",
+      "performers": []
+    },
+    {
+      "number": 16,
+      "title": "DP Faculty",
+      "performers": []
+    },
+    {
+      "number": 17,
+      "title": "Cinderella",
+      "performers": [
+        "Sloan Azar",
+        "Gwendolyn Bode",
+        "Victoria Budden",
+        "Kiernan Dietz",
+        "Lennon Hodgins",
+        "Helen Latuso",
+        "Camille Mauldin",
+        "Anna Molina",
+        "Caroline Payne",
+        "Ruby Pfefferle",
+        "Kennedy Rodrigue",
+        "Grace Sagona",
+        "Ailis Thacker",
+        "Geargia Vonderhaar"
+      ]
+    },
+    {
+      "number": 18,
+      "title": "Werk Out",
+      "performers": [
+        "Charlotte Almerico",
+        "Lucy Cardwell",
+        "Aveline DeJean",
+        "Madeline Delerno",
+        "Leyrer Dietz",
+        "Mary Claire Hodes",
+        "Adelaide Johnson",
+        "Cassie Lecompte-Johnson",
+        "Ellie Kepper",
+        "Stella Rizzo",
+        "Isabella Scelfo",
+        "Eleanor Vorhaben",
+        "Caroline Woodroof"
+      ]
+    },
+    {
+      "number": 19,
+      "title": "Ninjas",
+      "performers": [
+        "Emory Brewer",
+        "Audrey Buchtel",
+        "Cameron Caldwell",
+        "Charlotte Cardwell",
+        "Amelia Chrestman",
+        "Lexa Dayries",
+        "Beatrice Devillier",
+        "Lily Fay",
+        "Avery Fleiner",
+        "Celia Fleiner",
+        "Addyson Geerken",
+        "Mary Claire Hodnette",
+        "Cecilia Louapre",
+        "Parker Plaisance",
+        "Layla Raymond"
+      ]
+    },
+    {
+      "number": 20,
+      "title": "Supercalifragilistic",
+      "performers": [
+        "Reese Azar",
+        "Paisley Brown",
+        "Kennedy Coleman",
+        "Katherine Dickey",
+        "Evyn Estorge",
+        "Abigayle Johnson",
+        "Lola Jones",
+        "Lily Lakey",
+        "Clara Molina",
+        "Scarlett Vanderhooft"
+      ]
+    },
+    {
+      "number": 21,
+      "title": "NYI U",
+      "performers": [
+        "Dancer’s Pointe Thrive Competition Team"
+      ]
+    },
+    {
+      "number": 22,
+      "title": "Never Grow Up",
+      "performers": [
+        "Maren Bernard",
+        "Charleigh Blakeman",
+        "Merriman Coniglio",
+        "Madeline Fay",
+        "Annie Hamil",
+        "Grayson Hodgins",
+        "Hazel Hood",
+        "Vaeda Legrand",
+        "Ellison Mackel",
+        "Catalina Marin",
+        "Josephine Marino",
+        "Sloane Rizzo",
+        "Amelia Rothwell",
+        "Valentina Scelfo",
+        "Lucie Sclafini"
+      ]
+    },
+    {
+      "number": 23,
+      "title": "Landslide",
+      "performers": [
+        "Reese Clouatre",
+        "Emma Groetsch",
+        "Sara Kuhn",
+        "Kate Matessino",
+        "Mackenzie Miller",
+        "Aubrey Moody",
+        "Lucy Salkeld",
+        "Stella Salkeld",
+        "Gracyn Sapp",
+        "Katie Tuttle",
+        "Raegan Tuttle"
+      ]
+    },
+    {
+      "number": 24,
+      "title": "Texas Hold ‘Em",
+      "performers": [
+        "Avery Amerland",
+        "Eliza Budden",
+        "Charlotte Burst",
+        "Abigail Fischer",
+        "Brynn Graffagnini",
+        "Margot Kepper",
+        "Parker Laws",
+        "Millie Leger",
+        "Charlotte Linn",
+        "Eleanor Mauldin",
+        "Emily Messina",
+        "Charlotte Quaintance",
+        "Mary Reeves",
+        "Clara Schneider",
+        "Sloane Sharpe",
+        "Phoebe Uddo",
+        "Emmy Ursin",
+        "Everett Wiley"
+      ]
+    },
+    {
+      "number": 25,
+      "title": "Color In Your Hands",
+      "performers": [
+        "Camryn Adams",
+        "Alyse Boteler",
+        "Emily Clouatre",
+        "Brielle Dennis",
+        "Sage Dufrechou",
+        "Veronica Dupuy",
+        "Avery Hotstream",
+        "Isabella Huang",
+        "Ella Hutchins",
+        "Jessi Kammer",
+        "Ava Kennedy",
+        "Elise McEvers",
+        "Madeline Molina",
+        "Theresa Ocampo",
+        "Anna Claire Occhipinti",
+        "Carolina Plaia",
+        "Ava Truxillo",
+        "Claire Willmott",
+        "Emma Willmott"
+      ]
+    },
+    {
+      "number": 26,
+      "title": "Walking On Air",
+      "performers": [
+        "Dancer’s Pointe Thrive Competition Team"
+      ]
+    },
+    {
+      "number": 27,
+      "title": "Dream On",
+      "performers": [
+        "Dancer’s Pointe Thrive Competition Team"
+      ]
+    },
+    {
+      "number": 28,
+      "title": "Presentation of 5 year Students",
+      "performers": []
+    },
+    {
+      "number": 29,
+      "title": "The Princess Diaries Waltz",
+      "performers": [
+        "Charlotte Almerico",
+        "Lucy Cardwell",
+        "Aveline DeJean",
+        "Madeline Delerno",
+        "Leyrer Dietz",
+        "Mary Claire Hodes",
+        "Adelaide Johnson",
+        "Cassie Lecompte-Johnson",
+        "Ellie Kepper",
+        "Stella Rizzo",
+        "Isabella Scelfo",
+        "Eleanor Vorhaben",
+        "Caroline Woodroof"
+      ]
+    },
+    {
+      "number": 30,
+      "title": "Top Gals",
+      "performers": [
+        "Reese Clouatre",
+        "Emma Groetsch",
+        "Sara Kuhn",
+        "Kate Matessino",
+        "Mackenzie Miller",
+        "Aubrey Moody",
+        "Lucy Salkeld",
+        "Stella Salkeld",
+        "Gracyn Sapp",
+        "Katie Tuttle",
+        "Raegan Tuttle"
+      ]
+    },
+    {
+      "number": 31,
+      "title": "Suppe’ Overture",
+      "performers": [
+        "Camryn Adams",
+        "Alyse Boteler",
+        "Emily Clouatre",
+        "Brielle Dennis",
+        "Sage Dufrechou",
+        "Veronica Dupuy",
+        "Avery Hotstream",
+        "Isabella Huang",
+        "Ella Hutchins",
+        "Jessi Kammer",
+        "Ava Kennedy",
+        "Elise McEvers",
+        "Madeline Molina",
+        "Theresa Ocampo",
+        "Anna Claire Occhipinti",
+        "Carolina Plaia",
+        "Ava Truxillo",
+        "Claire Willmott",
+        "Emma Willmott"
+      ]
+    },
+    {
+      "number": 32,
+      "title": "2025 Cover Girl – Catalina Marin",
+      "performers": []
+    },
+    {
+      "number": 33,
+      "title": "Presentation of Top Ten Ad Winners",
+      "performers": []
+    },
+    {
+      "number": 34,
+      "title": "Radetsky Marsch",
+      "performers": [
+        "Emory Brewer",
+        "Audrey Buchtel",
+        "Cameron Caldwell",
+        "Charlotte Cardwell",
+        "Amelia Chrestman",
+        "Lexa Dayries",
+        "Beatrice Devillier",
+        "Lily Fay",
+        "Avery Fleiner",
+        "Celia Fleiner",
+        "Addyson Geerken",
+        "Marigny Greer",
+        "Mary Claire Hodnette",
+        "Cecilia Louapre",
+        "Adele Martinez",
+        "Parker Plaisance",
+        "Layla Raymond"
+      ]
+    },
+    {
+      "number": 35,
+      "title": "The Muses",
+      "performers": [
+        "Reese Azar",
+        "Paisley Brown",
+        "Kennedy Coleman",
+        "Katherine Dickey",
+        "Evyn Estorge",
+        "Abigayle Johnson",
+        "Lily Lakey",
+        "Clara Molina",
+        "Scarlett Vanderhooft"
+      ]
+    },
+    {
+      "number": 36,
+      "title": "Someday",
+      "performers": [
+        "Charlotte Arrieta",
+        "Landyn Beacher",
+        "Ruby Bellard",
+        "Violet DeJean",
+        "Ruthie Dueitt",
+        "Genevieve Johnson",
+        "Camille Laderer",
+        "Finley Mackel",
+        "Margot Murrell",
+        "Anastasia Navarette",
+        "Colette Riley",
+        "Sadie Rizzo"
+      ]
+    },
+    {
+      "number": 37,
+      "title": "Presentation of 10 year Students",
+      "performers": []
+    },
+    {
+      "number": 38,
+      "title": "Comptine d'un autre ete, l'apre midi",
+      "performers": [
+        "Alyse Boteler",
+        "Brielle Dennis",
+        "Avery Hotstream",
+        "Ella Hutchins",
+        "Jessi Kammer",
+        "Theresa Ocampo",
+        "Anna Claire Occhipinti",
+        "Carolina Plaia",
+        "Claire Willmott"
+      ]
+    },
+    {
+      "number": 39,
+      "title": "Every Girl’s A Super Girl",
+      "performers": [
+        "Sloan Azar",
+        "Gwendolyn Bode",
+        "Victoria Budden",
+        "Kiernan Dietz",
+        "Lennon Hodgins",
+        "Helen Latuso",
+        "Camille Mauldin",
+        "Anna Molina",
+        "Caroline Payne",
+        "Ruby Pfefferle",
+        "Kennedy Rodrigue",
+        "Grace Sagona",
+        "Ailis Thacker",
+        "Geargia Vonderhaar"
+      ]
+    },
+    {
+      "number": 40,
+      "title": "Mountain and The Sea",
+      "performers": [
+        "Reese Azar",
+        "Paisley Brown",
+        "Kennedy Coleman",
+        "Katherine Dickey",
+        "Evyn Estorge",
+        "Abigayle Johnson",
+        "Lily Lakey",
+        "Clara Molina",
+        "Scarlett Vanderhooft"
+      ]
+    },
+    {
+      "number": 41,
+      "title": "Me Against The Music",
+      "performers": [
+        "Emory Brewer",
+        "Audrey Buchtel",
+        "Cameron Caldwell",
+        "Charlotte Cardwell",
+        "Amelia Chrestman",
+        "Lexa Dayries",
+        "Beatrice Devillier",
+        "Lily Fay",
+        "Avery Fleiner",
+        "Celia Fleiner",
+        "Addyson Geerken",
+        "Marigny Greer",
+        "Mary Claire Hodnette",
+        "Cecilia Louapre",
+        "Adele Martinez",
+        "Parker Plaisance",
+        "Layla Raymond"
+      ]
+    },
+    {
+      "number": 42,
+      "title": "George Michael Medley",
+      "performers": [
+        "Alyse Boteler",
+        "Brielle Dennis",
+        "Veronica Dupuy",
+        "Avery Hotstream",
+        "Ella Hutchins",
+        "Jessi Kammer",
+        "Theresa Ocampo",
+        "Carolina Plaia",
+        "Claire Willmott"
+      ]
+    },
+    {
+      "number": 43,
+      "title": "Drake",
+      "performers": [
+        "Reese Clouatre",
+        "Emma Groetsch",
+        "Sara Kuhn",
+        "Kate Matessino",
+        "Mackenzie Miller",
+        "Aubrey Moody",
+        "Lucy Salkeld",
+        "Stella Salkeld",
+        "Gracyn Sapp",
+        "Katie Tuttle",
+        "Raegan Tuttle"
+      ]
+    },
+    {
+      "number": 44,
+      "title": "Red",
+      "performers": [
+        "Reese Azar",
+        "Paisley Brown",
+        "Lucy Cardwell",
+        "Kennedy Coleman",
+        "Aveline DeJean",
+        "Katherine Dickey",
+        "Evyn Estorge",
+        "Mary Claire Hodes",
+        "Abigayle Johnson",
+        "Adelaide Johnson",
+        "Lily Lakey",
+        "Camille Mauldin",
+        "Clara Molina",
+        "Stella Rizzo",
+        "Isabella Scelfo",
+        "Scarlett Vanderhooft",
+        "Eleanor Vorhaben"
+      ]
+    },
+    {
+      "number": 45,
+      "title": "Disco Pop",
+      "performers": [
+        "Dancer’s Pointe Thrive Competition Team"
+      ]
+    },
+    {
+      "number": 46,
+      "title": "Alien",
+      "performers": [
+        "Emory Brewer",
+        "Audrey Buchtel",
+        "Cameron Caldwell",
+        "Charlotte Cardwell",
+        "Amelia Chrestman",
+        "Lexa Dayries",
+        "Beatrice Devillier",
+        "Lily Fay",
+        "Avery Fleiner",
+        "Celia Fleiner",
+        "Addyson Geerken",
+        "Marigny Greer",
+        "Mary Claire Hodnette",
+        "Cecilia Louapre",
+        "Adele Martinez",
+        "Parker Plaisance",
+        "Layla Raymond"
+      ]
+    }
+  ]
+}
