@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Dancer's Pointe Recital Search</title>
+    <link rel="manifest" href="manifest.json" />
+    <link href="https://cdn.jsdelivr.net/npm/vuetify@3.3.8/dist/vuetify.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@7.1.96/css/materialdesignicons.min.css" rel="stylesheet" />
+    <style>
+        body {
+            font-family: Roboto, sans-serif;
+            margin: 20px;
+        }
+
+        .subtitle-wrap {
+            white-space: normal !important;
+            word-break: break-word !important;
+            overflow-wrap: break-word !important;
+            display: block !important;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <v-app>
+            <v-container>
+                <h1>Dancer's Pointe Recital Search</h1>
+                
+                <v-select label="Select Show" v-model="selectedShow" :items="shows" item-title="label"
+                    item-value="value" outlined dense></v-select>
+
+                <v-alert type="error" v-if="error">{{ error }}</v-alert>
+
+                <v-divider class="mb-4"></v-divider>
+
+                <!-- Favorites Accordion -->
+                <v-expansion-panels multiple>
+                    <v-expansion-panel>
+                        <v-expansion-panel-title>
+                            My Favorites ({{ favorites.size }})
+                        </v-expansion-panel-title>
+                        <v-expansion-panel-text>
+                            <v-list two-lines>
+                                <v-list-item v-for="fav in favoriteResults" :key="fav.name">
+                                    <v-list-item-content>
+                                        <v-list-item-title class="d-flex justify-space-between align-center">
+                                            {{ fav.name }}
+                                            <v-icon color="amber" @click="toggleFavorite(fav.name)"
+                                                style="cursor: pointer;" title="Remove from favorites">
+                                                mdi-star
+                                            </v-icon>
+                                        </v-list-item-title>
+                                        <v-list-item-subtitle class="subtitle-wrap">
+                                            <span v-for="(act, i) in fav.acts" :key="act.number">
+                                                #{{ act.number }} — {{ act.title }}<span
+                                                    v-if="i < fav.acts.length - 1"><br /></span>
+                                            </span>
+                                        </v-list-item-subtitle>
+                                    </v-list-item-content>
+                                </v-list-item>
+                                <div v-if="favorites.size === 0">No favorites added yet.</div>
+                            </v-list>
+                        </v-expansion-panel-text>
+                    </v-expansion-panel>
+                </v-expansion-panels>
+
+                <v-text-field label="Search dancer" v-model="search" clearable outlined :loading="loading"
+                    :disabled="!selectedShow || loading" class="mt-3"></v-text-field>
+
+                <div v-if="search && searchResults.length === 0 && !loading">
+                    <p>No dancers found matching "{{ search }}"</p>
+                </div>
+
+                <v-list two-lines>
+                    <v-list-item v-for="result in searchResults" :key="result.name">
+                        <v-list-item-content>
+                            <v-list-item-title class="d-flex justify-space-between align-center">
+                                {{ result.name }}
+                                <v-icon color="amber" @click="toggleFavorite(result.name)" class="ml-2"
+                                    style="cursor: pointer;">
+                                    {{ isFavorite(result.name) ? 'mdi-star' : 'mdi-star-outline' }}
+                                </v-icon>
+                            </v-list-item-title>
+                            <v-list-item-subtitle class="subtitle-wrap">
+                                <span v-for="(act, i) in result.acts" :key="act.number">
+                                    #{{ act.number }} — {{ act.title }}<span v-if="i < result.acts.length - 1"><br />
+                                    </span>
+                                </span>
+                            </v-list-item-subtitle>
+                        </v-list-item-content>
+                    </v-list-item>
+
+                </v-list>
+            </v-container>
+
+        </v-app>
+    </div>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vuetify@3.3.8/dist/vuetify.min.js"></script>
+    <script>
+        const { createApp, ref, computed, watch } = Vue;
+        const { createVuetify } = Vuetify;
+
+        const vuetify = createVuetify();
+
+        createApp({
+            setup() {
+                const search = ref('');
+                const selectedShow = ref('');
+                const showData = ref(null);
+                const loading = ref(false);
+                const error = ref(null);
+                const showOnlyFavorites = ref(false);
+
+                // Reactive favorites for current show, stored as Set
+                const favorites = ref(new Set());
+
+                const shows = [
+                    { label: "Saturday, June 21 12PM Show", value: "21_12pm" },
+                    { label: "Saturday, June 21 5PM Show", value: "21_5pm" },
+                    { label: "Sunday, June 22 12PM Show", value: "22_12pm" },
+                    { label: "Sunday, June 22 5PM Show", value: "22_5pm" },
+                ];
+
+                // Load favorites for a given show from localStorage
+                function loadFavorites(showKey) {
+                    if (!showKey) {
+                        favorites.value = new Set();
+                        return;
+                    }
+                    const stored = localStorage.getItem(`favorites_${showKey}`);
+                    favorites.value = new Set(JSON.parse(stored || '[]'));
+                }
+
+                // Save favorites for current show to localStorage
+                function saveFavorites() {
+                    if (!selectedShow.value) return;
+                    localStorage.setItem(`favorites_${selectedShow.value}`, JSON.stringify([...favorites.value]));
+                }
+
+                // When selectedShow changes: clear search, load show data & favorites
+                watch(selectedShow, async (val) => {
+                    if (!val) {
+                        showData.value = null;
+                        favorites.value = new Set();
+                        search.value = '';
+                        return;
+                    }
+
+                    showData.value = null;
+                    search.value = '';
+                    loading.value = true;
+                    error.value = null;
+
+                    // Load favorites for this show
+                    loadFavorites(val);
+
+                    try {
+                        const response = await fetch(`${val}.json`);
+                        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                        const data = await response.json();
+                        showData.value = data;
+                    } catch (e) {
+                        error.value = 'Failed to load show data: ' + e.message;
+                    } finally {
+                        loading.value = false;
+                    }
+                });
+
+                const searchResults = computed(() => {
+                    if (!search.value.trim() || !showData.value) return [];
+                    const q = search.value.toLowerCase();
+                    const map = {};
+
+                    showData.value.acts.forEach(act => {
+                        act.performers.forEach(name => {
+                            if (name.toLowerCase().includes(q)) {
+                                if (!map[name]) map[name] = [];
+                                map[name].push({ number: act.number, title: act.title });
+                            }
+                        });
+                    });
+
+                    let results = Object.entries(map).map(([name, acts]) => ({ name, acts }));
+
+                    if (showOnlyFavorites.value) {
+                        results = results.filter(r => isFavorite(r.name));
+                    }
+
+                    return results;
+                });
+
+                const toggleFavorite = (name) => {
+                    if (!selectedShow.value) return;
+                    if (favorites.value.has(name)) {
+                        favorites.value.delete(name);
+                    } else {
+                        favorites.value.add(name);
+                    }
+                    saveFavorites();
+                };
+
+                const isFavorite = (name) => favorites.value.has(name);
+
+                // Compute favorite dancers with acts for current show
+                const favoriteResults = computed(() => {
+                    if (!showData.value) return [];
+                    const map = {};
+                    showData.value.acts.forEach(act => {
+                        act.performers.forEach(name => {
+                            if (favorites.value.has(name)) {
+                                if (!map[name]) map[name] = [];
+                                map[name].push({ number: act.number, title: act.title });
+                            }
+                        });
+                    });
+                    return Object.entries(map).map(([name, acts]) => ({ name, acts }));
+                });
+
+                return {
+                    search,
+                    selectedShow,
+                    showData,
+                    searchResults,
+                    shows,
+                    loading,
+                    error,
+                    favorites,
+                    showOnlyFavorites,
+                    toggleFavorite,
+                    isFavorite,
+                    favoriteResults
+                };
+            }
+        }).use(vuetify).mount('#app');
+    </script>
+    <script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('service-worker.js')
+      .then(() => console.log('Service Worker Registered'));
+  }
+</script>
+
+
+</body>
+
+</html>
