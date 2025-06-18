@@ -40,7 +40,7 @@
 
         <v-alert type="error" v-if="error">{{ error }}</v-alert>
 
-        <v-divider class="mb-4"></v-divider>
+        <v-divider v-if="selectedShow != ''" class="mb-4"></v-divider>
 
         <div v-touch="onSwipe">
           <!-- PROGRAM VIEW -->
