@@ -80,18 +80,20 @@
 
             // Fetch and process data on mount
             useEffect(() => {
-                fetch('recital_data.dat') // Fetch the new encoded file
+                fetch('recital_data.dat') // Fetch the encoded file
                     .then(response => {
                         if (!response.ok) {
                             throw new Error('Network response was not ok');
                         }
-                        return response.text(); // Get the response as plain text
+                        return response.blob(); // Get the response as a Blob
                     })
+                    .then(blob => blob.text()) // Read the Blob as text (which will be Base64)
                     .then(base64String => {
-                        // Decode the Base64 string to a JSON string
-                        const jsonString = atob(base64String);
-                        // Parse the JSON string into an object
-                        const data = JSON.parse(jsonString);
+                        // Use a robust method to decode UTF-8 characters from Base64
+                        const decodedString = new TextDecoder().decode(
+                            Uint8Array.from(atob(base64String), c => c.charCodeAt(0))
+                        );
+                        const data = JSON.parse(decodedString);
 
                         // Transform the data into the key-value format the app uses
                         const transformedData = data.shows.reduce((acc, show) => {
