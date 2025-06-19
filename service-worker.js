@@ -7,9 +7,10 @@ const urlsToCache = [
   'index.html',
   'recital_data.dat',
   'manifest.json',
-  '/image/icon-192.png',
-  '/image/icon-512.png',
-  '/css/custom.css'
+  'icon-192.png',
+  'icon-512.png',
+  'style.css',
+  'app.js',
 ];
 
 // Install event: opens the cache and adds the core files to it.
