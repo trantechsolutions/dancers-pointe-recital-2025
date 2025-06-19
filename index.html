@@ -4,7 +4,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="Search and explore the Dancer's Pointe Recital program by show or performer. Mobile-friendly design with quick access to favorites and full act details." />
+  <meta name="description"
+    content="Search and explore the Dancer's Pointe Recital program by show or performer. Mobile-friendly design with quick access to favorites and full act details." />
   <title>Dancer's Pointe Recital</title>
   <link rel="manifest" href="manifest.json" />
   <link href="https://cdn.jsdelivr.net/npm/vuetify@3.3.8/dist/vuetify.min.css" rel="stylesheet" />
@@ -27,13 +28,28 @@
       border: 2px solid palevioletred !important;
       background-color: pink;
     }
+
+    .no-performers {
+      background-color: gold !important;
+      /* Light gray */
+      opacity: 0.8;
+    }
+
+    [v-cloak] {
+      display: none !important;
+    }
+
+    .content-area {
+      padding-bottom: 80px; /* Adjust based on your v-bottom-navigation height */
+    }
   </style>
 </head>
 
 <body>
-  <div id="app">
+  <div id="app" v-cloak>
     <v-app>
-      <v-container>
+      <v-container class="pa-4 content-area">
+        <v-main>
         <h1 class="text-h4 text-md-h4 text-lg-h4 font-weight-bold text-center mb-4">Dancer's Pointe Recital</h1>
 
         <v-select label="Select Show" v-model="selectedShow" :items="shows" item-title="label" item-value="value"
@@ -86,10 +102,10 @@
             <div v-if="showData" class="mt-6">
               <h2>Program</h2>
 
-              <v-card v-for="(act, i) in showData.acts" :key="act.number + i" class="mb-3 pa-3" elevation="1"
-                :class="{ 'favorite-act': act.performers.some(p => isFavorite(p)) }">
+              <v-card v-for="(act, i) in showData.acts" :key="act.number + i" class="mb-3 pa-3" elevation="1" :class="{ 'favorite-act': act.performers.some(p => isFavorite(p)),
+              'no-performers': !act.performers || act.performers.length === 0 }">
                 <div class="text-sm font-weight-bold">{{ act.number }} - {{ act.title }}</div>
-                <div class="text-caption mt-1">
+                <div class="text-caption mt-1" v-if="act.performers.length > 0">
                   <strong>Performers:</strong><br />
                   <span v-for="(name, j) in act.performers" :key="j">
                     {{ name }}<span v-if="j < act.performers.length - 1">, </span>
@@ -131,6 +147,7 @@
 
           </div>
         </div>
+        </v-main>
         <v-bottom-navigation v-model="activeTab" color="pink" grow class="mt-8">
           <v-btn value="program" icon>
             <v-icon>mdi-format-list-bulleted</v-icon>
