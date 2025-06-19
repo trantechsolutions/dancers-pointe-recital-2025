@@ -1,376 +1,501 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description"
-    content="Search and explore the Dancer's Pointe Recital program by show or performer. Mobile-friendly design with quick access to favorites and full act details." />
-  <title>Dancer's Pointe Recital</title>
-  <link rel="manifest" href="manifest.json" />
-  <link href="https://cdn.jsdelivr.net/npm/vuetify@3.3.8/dist/vuetify.min.css" rel="stylesheet" />
-  <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet" />
-  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@7.1.96/css/materialdesignicons.min.css" rel="stylesheet" />
-  <style>
-    body {
-      font-family: Roboto, sans-serif;
-      margin: 20px;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dancer's Pointe Recital</title>
+    <!-- PWA Manifest Link -->
+    <link rel="manifest" href="manifest.json">
+    <!-- Theme color for browser chrome -->
+    <meta name="theme-color" content="#db2777">
+    
+    <!-- Font Awesome CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" xintegrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-    .subtitle-wrap {
-      white-space: normal !important;
-      word-break: break-word !important;
-      overflow-wrap: break-word !important;
-      display: block !important;
-    }
-
-    .favorite-act {
-      border: 2px solid palevioletred !important;
-      background-color: pink;
-    }
-
-    .no-performers {
-      background-color: gold !important;
-      /* Light gray */
-      opacity: 0.8;
-    }
-
-    [v-cloak] {
-      display: none !important;
-    }
-
-    .content-area {
-      padding-bottom: 80px; /* Adjust based on your v-bottom-navigation height */
-    }
-  </style>
+    <!-- Basic CSS Styles -->
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            margin: 0;
+            background-color: #f9fafb;
+            color: #1f2937;
+        }
+        .container {
+            max-width: 640px;
+            margin: 0 auto;
+            padding: 1rem 1rem 6rem 1rem;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+        .header h1 {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #db2777;
+        }
+        .header p {
+            font-size: 1.125rem;
+            color: #4b5563;
+        }
+        select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>');
+            background-position: right 0.5rem center;
+            background-repeat: no-repeat;
+            background-size: 1.5em 1.5em;
+            padding-right: 2.5rem;
+        }
+        .favorites-section {
+            margin-bottom: 1rem;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+        }
+        .favorites-toggle {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem;
+            background-color: #ffffff;
+            border: none;
+            cursor: pointer;
+            font-size: 1.125rem;
+            font-weight: 600;
+        }
+        .favorites-toggle:hover {
+            background-color: #f9fafb;
+        }
+        .icon-container { /* Style for icon containers */
+            width: 1.5rem;
+            height: 1.5rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem; /* Adjust icon size */
+        }
+        .favorites-toggle .icon-container {
+            transition: transform 0.2s;
+        }
+        .favorites-toggle.expanded .icon-container {
+            transform: rotate(180deg);
+        }
+        .favorites-content {
+            padding: 0.75rem;
+            border-top: 1px solid #e5e7eb;
+        }
+        .favorite-item {
+            padding: 0.75rem;
+            background-color: #f9fafb;
+            border-radius: 0.5rem;
+            margin-bottom: 0.75rem;
+        }
+        .favorite-item:last-child {
+            margin-bottom: 0;
+        }
+        .favorite-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .favorite-header h3 {
+            font-weight: bold;
+            margin: 0;
+        }
+        .favorite-header button,
+        .search-result-header button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+        }
+        .favorite-acts div {
+            font-size: 0.875rem;
+            color: #4b5563;
+            margin-top: 0.25rem;
+        }
+        .program-view h2, .search-view h2 {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 0.75rem;
+        }
+        .act-card {
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            margin-bottom: 0.75rem;
+            transition: all 0.2s;
+            background-color: #ffffff;
+            border: 1px solid #e5e7eb;
+        }
+        .act-card.favorite {
+            border: 2px solid #ec4899;
+            background-color: #fdf2f8;
+        }
+        .act-card.no-performers {
+            background-color: #fefce8;
+            opacity: 0.8;
+        }
+        .act-card p {
+            font-weight: bold;
+            margin: 0;
+        }
+        .act-card .performers {
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+            color: #374151;
+        }
+        .search-view input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            margin-bottom: 1rem;
+            box-sizing: border-box;
+        }
+        .search-result-item {
+            list-style: none;
+            padding: 0.75rem;
+            background-color: #ffffff;
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            border: 1px solid #e5e7eb;
+            margin-bottom: 0.75rem;
+        }
+        .search-result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+        .search-result-header h3 {
+             font-weight: bold;
+             margin: 0;
+        }
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: #ffffff;
+            border-top: 1px solid #e5e7eb;
+            box-shadow: 0 -1px 3px 0 rgba(0, 0, 0, 0.1);
+            max-width: 640px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-around;
+        }
+        .bottom-nav button {
+            flex: 1;
+            padding: 0.75rem;
+            text-align: center;
+            background: none;
+            border: none;
+            cursor: pointer;
+            border-top: 2px solid transparent;
+            transition: all 0.2s;
+            color: #6b7280;
+        }
+        .bottom-nav button.active {
+            color: #db2777;
+            border-top-color: #db2777;
+        }
+        .bottom-nav .icon-container {
+            margin: 0 auto;
+        }
+        .bottom-nav span {
+            font-size: 0.75rem;
+            display: block;
+        }
+    </style>
 </head>
-
 <body>
-  <div id="app" v-cloak>
-    <v-app>
-      <v-container class="pa-4 content-area">
-        <v-main>
-        <h1 class="text-h4 text-md-h4 text-lg-h4 font-weight-bold text-center mb-4">Dancer's Pointe Recital</h1>
+    <div id="root"></div>
 
-        <v-select label="Select Show" v-model="selectedShow" :items="shows" item-title="label" item-value="value"
-          outlined dense></v-select>
+    <!-- React and ReactDOM scripts -->
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
-        <v-alert type="error" v-if="error">{{ error }}</v-alert>
+    <script type="text/babel">
+        const { useState, useEffect, useMemo, useRef } = React;
 
-        <v-divider v-if="selectedShow" class="mb-4"></v-divider>
-        <!-- Favorites Accordion -->
-        <v-expansion-panels multiple v-if="selectedShow">
-          <v-expansion-panel>
-            <v-expansion-panel-title>
-              My Favorites ({{ favorites.size }})
-            </v-expansion-panel-title>
-            <v-expansion-panel-text>
-              <v-list two-lines>
-                <v-list-item v-for="fav in favoriteResults" :key="fav.name">
-                  <v-list-item-content>
-                    <v-list-item-title class="d-flex justify-space-between align-center">
-                      {{ fav.name }}
-                      <v-icon color="amber" @click="toggleFavorite(fav.name)" style="cursor: pointer;"
-                        title="Remove from favorites">
-                        mdi-star
-                      </v-icon>
-                    </v-list-item-title>
+        // Reusable Icon Component using Font Awesome
+        const Icon = ({ name, type = 'fas', ...props }) => {
+            const className = `${type} fa-${name}`;
+            return <i className={className} {...props}></i>;
+        };
 
-                    <v-list-item-subtitle class="subtitle-wrap">
-                      <template v-if="fav.missing">
-                        <em class="text-error">Not in this show</em>
-                      </template>
-                      <template v-else>
-                        <span v-for="(act, i) in fav.acts" :key="i">
-                          #{{ act.number }} — {{ act.title }}<span v-if="i < fav.acts.length - 1"><br /></span>
-                        </span>
-                      </template>
-                    </v-list-item-subtitle>
-                  </v-list-item-content>
-                </v-list-item>
+        // Helper functions for localStorage
+        const saveFavoritesToLocalStorage = (favorites) => {
+            try {
+                localStorage.setItem('dancersPointeFavorites', JSON.stringify(Array.from(favorites)));
+            } catch (error) {
+                console.error("Error saving favorites to localStorage: ", error);
+            }
+        };
 
-                <div v-if="favorites.size === 0">No favorites added yet.</div>
-              </v-list>
-            </v-expansion-panel-text>
-          </v-expansion-panel>
-        </v-expansion-panels>
+        const loadFavoritesFromLocalStorage = () => {
+            try {
+                const storedFavorites = localStorage.getItem('dancersPointeFavorites');
+                return storedFavorites ? new Set(JSON.parse(storedFavorites)) : new Set();
+            } catch (error) {
+                console.error("Error loading favorites from localStorage: ", error);
+                return new Set();
+            }
+        };
+        
+        // Helper function to format date
+        const formatShowDateTime = (datetime) => {
+             const date = new Date(datetime);
+             return date.toLocaleDateString('en-US', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: 'numeric',
+                minute: 'numeric',
+                hour12: true
+            });
+        };
 
-        <div v-touch="onSwipe">
-          <!-- PROGRAM VIEW -->
-          <div v-if="activeTab === 'program'" class="tab-view">
-            <!-- Entire Program Display -->
-            <div v-if="showData" class="mt-6">
-              <h2>Program</h2>
+        // Main App Component
+        function App() {
+            const [search, setSearch] = useState('');
+            const [selectedShow, setSelectedShow] = useState('');
+            const [favorites, setFavorites] = useState(new Set());
+            const [activeTab, setActiveTab] = useState('program');
+            const [isFavoritesExpanded, setIsFavoritesExpanded] = useState(false);
+            const [recitalData, setRecitalData] = useState(null);
+            const [loading, setLoading] = useState(true);
+            const [error, setError] = useState(null);
+            
+            const touchStartRef = useRef(0);
 
-              <v-card v-for="(act, i) in showData.acts" :key="act.number + i" class="mb-3 pa-3" elevation="1" :class="{ 'favorite-act': act.performers.some(p => isFavorite(p)),
-              'no-performers': !act.performers || act.performers.length === 0 }">
-                <div class="text-sm font-weight-bold">{{ act.number }} - {{ act.title }}</div>
-                <div class="text-caption mt-1" v-if="act.performers.length > 0">
-                  <strong>Performers:</strong><br />
-                  <span v-for="(name, j) in act.performers" :key="j">
-                    {{ name }}<span v-if="j < act.performers.length - 1">, </span>
-                  </span>
+            // Fetch and process data on mount
+            useEffect(() => {
+                fetch('dance_shows.json')
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        const transformedData = data.shows.reduce((acc, show) => {
+                            acc[show.datetime] = { label: formatShowDateTime(show.datetime), acts: show.acts };
+                            return acc;
+                        }, {});
+                        setRecitalData(transformedData);
+                        setLoading(false);
+                    })
+                    .catch(error => {
+                        setError('Failed to load recital data. Please make sure dance_shows.json is in the public folder.');
+                        setLoading(false);
+                    });
+            }, []);
+
+            // Load favorites from localStorage
+            useEffect(() => { setFavorites(loadFavoritesFromLocalStorage()); }, []);
+            // Save favorites to localStorage
+            useEffect(() => { saveFavoritesToLocalStorage(favorites); }, [favorites]);
+
+            const shows = useMemo(() => {
+                if (!recitalData) return [];
+                return Object.keys(recitalData).map(key => ({ label: recitalData[key].label, value: key }));
+            }, [recitalData]);
+
+            const showData = selectedShow ? recitalData[selectedShow] : null;
+
+            const searchResults = useMemo(() => {
+                if (!search.trim() || !showData || !showData.acts) return [];
+                const q = search.toLowerCase();
+                const map = {};
+                showData.acts.forEach(act => {
+                    (act.performers || []).forEach(name => {
+                        if (name.toLowerCase().includes(q)) {
+                            if (!map[name]) map[name] = [];
+                            map[name].push({ number: act.number, title: act.title });
+                        }
+                    });
+                });
+                return Object.entries(map).map(([name, acts]) => ({ name, acts })).sort((a,b) => a.name.localeCompare(b.name));
+            }, [search, showData]);
+
+            const favoriteResults = useMemo(() => {
+                if (!showData || !showData.acts) return [];
+                const inShowMap = {};
+                const allPerformers = new Set();
+                showData.acts.forEach(act => {
+                    (act.performers || []).forEach(name => {
+                        allPerformers.add(name);
+                        if (!inShowMap[name]) inShowMap[name] = [];
+                        inShowMap[name].push({ number: act.number, title: act.title });
+                    });
+                });
+                return Array.from(favorites).sort().map(name => ({
+                    name,
+                    acts: inShowMap[name] || [],
+                    missing: !allPerformers.has(name)
+                }));
+            }, [favorites, showData]);
+            
+            const toggleFavorite = (name) => {
+                setFavorites(prevFavorites => {
+                    const newFavorites = new Set(prevFavorites);
+                    newFavorites.has(name) ? newFavorites.delete(name) : newFavorites.add(name);
+                    return newFavorites;
+                });
+            };
+
+            const handleTouchStart = (e) => { touchStartRef.current = e.targetTouches[0].clientX; };
+            const handleTouchEnd = (e) => {
+                const touchEnd = e.changedTouches[0].clientX;
+                const delta = touchEnd - touchStartRef.current;
+                if (Math.abs(delta) > 50) {
+                    if (delta < 0 && activeTab === 'program') setActiveTab('search');
+                    else if (delta > 0 && activeTab === 'search') setActiveTab('program');
+                }
+            };
+
+            if (loading) return <div>Loading recital data...</div>;
+            if (error) return <div>Error: {error}</div>;
+
+            return (
+                <div className="container" onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
+                    <header className="header">
+                        <h1>Dancer's Pointe</h1>
+                        <p>Recital Program</p>
+                    </header>
+                    <main>
+                        <div style={{ marginBottom: '1rem' }}>
+                            <select value={selectedShow} onChange={(e) => setSelectedShow(e.target.value)}>
+                                <option value="">-- Select a Show --</option>
+                                {shows.map(show => <option key={show.value} value={show.value}>{show.label}</option>)}
+                            </select>
+                        </div>
+                        {selectedShow && (
+                            <>
+                                <div className="favorites-section">
+                                    <button onClick={() => setIsFavoritesExpanded(!isFavoritesExpanded)} className={`favorites-toggle ${isFavoritesExpanded ? 'expanded' : ''}`}>
+                                        <span>My Favorites ({favorites.size})</span>
+                                        <div className="icon-container"><Icon name="chevron-down" /></div>
+                                    </button>
+                                    {isFavoritesExpanded && (
+                                        <div className="favorites-content">
+                                            {favoriteResults.length > 0 ? (
+                                                favoriteResults.map(fav => (
+                                                    <div key={fav.name} className="favorite-item">
+                                                        <div className="favorite-header">
+                                                            <h3>{fav.name}</h3>
+                                                            <button onClick={() => toggleFavorite(fav.name)}>
+                                                                 <div className="icon-container" style={{color: '#f59e0b'}}><Icon name="star" type="fas"/></div>
+                                                            </button>
+                                                        </div>
+                                                        <div className="favorite-acts">
+                                                            {fav.missing ? <em style={{color: '#ef4444'}}>Not in this show</em> : fav.acts.map((act, i) => <div key={i}>#{act.number} &mdash; {act.title}</div>)}
+                                                        </div>
+                                                    </div>
+                                                ))
+                                            ) : <p>No favorites added yet.</p>}
+                                        </div>
+                                    )}
+                                </div>
+                                {activeTab === 'program' ? <ProgramView showData={showData} favorites={favorites} /> : <SearchView search={search} setSearch={setSearch} results={searchResults} favorites={favorites} toggleFavorite={toggleFavorite} />}
+                            </>
+                        )}
+                    </main>
+                    <nav className="bottom-nav">
+                        <button onClick={() => setActiveTab('program')} className={activeTab === 'program' ? 'active' : ''}>
+                           <div className="icon-container"><Icon name="list" /></div>
+                            <span>Program</span>
+                        </button>
+                        <button onClick={() => setActiveTab('search')} className={activeTab === 'search' ? 'active' : ''}>
+                            <div className="icon-container"><Icon name="search" /></div>
+                            <span>Search</span>
+                        </button>
+                    </nav>
                 </div>
-              </v-card>
-            </div>
-          </div>
-          <!-- SEARCH VIEW -->
-          <div v-else-if="activeTab === 'search'" class="tab-view">
-
-            <v-text-field label="Search dancer" v-model="search" clearable outlined :loading="loading"
-              :disabled="!selectedShow || loading" class="mt-3"></v-text-field>
-
-            <div v-if="search && searchResults.length === 0 && !loading">
-              <p>No dancers found matching "{{ search }}"</p>
-            </div>
-
-            <v-list two-lines>
-              <v-list-item v-for="result in searchResults" :key="result.name">
-                <v-list-item-content>
-                  <v-list-item-title class="d-flex justify-space-between align-center">
-                    {{ result.name }}
-                    <v-icon color="amber" @click="toggleFavorite(result.name)" class="ml-2" style="cursor: pointer;">
-                      {{ isFavorite(result.name) ? 'mdi-star' : 'mdi-star-outline' }}
-                    </v-icon>
-                  </v-list-item-title>
-                  <v-list-item-subtitle class="subtitle-wrap">
-                    <span v-for="(act, i) in result.acts" :key="act.number">
-                      #{{ act.number }} — {{ act.title }}<span v-if="i < result.acts.length - 1"><br />
-                      </span>
-                    </span>
-                  </v-list-item-subtitle>
-                </v-list-item-content>
-              </v-list-item>
-
-            </v-list>
-
-
-          </div>
-        </div>
-        </v-main>
-        <v-bottom-navigation v-model="activeTab" color="pink" grow class="mt-8">
-          <v-btn value="program" icon>
-            <v-icon>mdi-format-list-bulleted</v-icon>
-            <span class="text-caption">Program</span>
-          </v-btn>
-          <v-btn value="search" icon>
-            <v-icon>mdi-magnify</v-icon>
-            <span class="text-caption">Search</span>
-          </v-btn>
-        </v-bottom-navigation>
-
-
-      </v-container>
-
-    </v-app>
-  </div>
-
-  <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/vuetify@3.3.8/dist/vuetify.min.js"></script>
-  <script>
-    const { createApp, ref, computed, watch } = Vue;
-    const { createVuetify } = Vuetify;
-
-    const vuetify = createVuetify();
-
-
-    createApp({
-      setup() {
-        const search = ref('');
-        const selectedShow = ref('');
-        const showData = ref(null);
-        const loading = ref(false);
-        const error = ref(null);
-        const showOnlyFavorites = ref(false);
-        const activeTab = ref('program');
-
-        function handleSwipeLeft() {
-          if (activeTab.value === 'program') activeTab.value = 'search';
+            );
         }
 
-        function handleSwipeRight() {
-          if (activeTab.value === 'search') activeTab.value = 'program';
+        function ProgramView({ showData, favorites }) {
+            if (!showData || !showData.acts) return <p style={{textAlign: 'center', color: '#6b7280', marginTop: '2rem'}}>Select a show to see the program.</p>;
+            return (
+                <div className="program-view">
+                    <h2>Program</h2>
+                    {showData.acts.map(act => {
+                        const isFavAct = (act.performers || []).some(p => favorites.has(p));
+                        const noPerformers = !act.performers || act.performers.length === 0;
+                        return (
+                            <div key={act.number} className={`act-card ${isFavAct ? 'favorite' : ''} ${noPerformers ? 'no-performers' : ''}`}>
+                                <p>{act.number} - {act.title}</p>
+                                {!noPerformers && <div className="performers"><strong>Performers:</strong> {act.performers.join(', ')}</div>}
+                            </div>
+                        )
+                    })}
+                </div>
+            );
         }
 
-
-        // Reactive favorites for current show, stored as Set
-        const favorites = ref(new Set());
-
-        const shows = [
-          { label: "Saturday, June 21 12PM Show", value: "21_12pm" },
-          { label: "Saturday, June 21 5PM Show", value: "21_5pm" },
-          { label: "Sunday, June 22 12PM Show", value: "22_12pm" },
-          { label: "Sunday, June 22 5PM Show", value: "22_5pm" },
-        ];
-
-        const searchTableHeaders = [
-          { text: 'Dancer Name', value: 'name' },
-          { text: 'Acts', value: 'acts' }
-        ];
-
-        const programHeaders = [
-          { text: 'Act #', value: 'number' },
-          { text: 'Title', value: 'title' },
-          { text: 'Performers', value: 'performers' }
-        ];
-
-
-        // Load favorites for a given show from localStorage
-        function loadFavorites() {
-          const stored = localStorage.getItem(`favorites_global`);
-          favorites.value = new Set(JSON.parse(stored || '[]'));
+        function SearchView({ search, setSearch, results, favorites, toggleFavorite }) {
+            return (
+                <div className="search-view">
+                     <h2>Search</h2>
+                    <input type="text" placeholder="Search for a dancer..." value={search} onChange={(e) => setSearch(e.target.value)} />
+                    {search && results.length === 0 && <p style={{textAlign: 'center', color: '#6b7280'}}>No dancers found matching "{search}"</p>}
+                    {results.length > 0 && (
+                        <div>
+                            {results.map(result => {
+                                const isFavorite = favorites.has(result.name);
+                                return (
+                                <div key={result.name} className="search-result-item">
+                                    <div className="search-result-header">
+                                        <div style={{flex: 1}}>
+                                            <h3>{result.name}</h3>
+                                            <div className="favorite-acts">
+                                                {result.acts.map((act, i) => <div key={i}>#{act.number} &mdash; {act.title}</div>)}
+                                            </div>
+                                        </div>
+                                        <button onClick={() => toggleFavorite(result.name)}>
+                                             <div className="icon-container" style={{ color: isFavorite ? '#f59e0b' : '#9ca3af' }}>
+                                                <Icon name="star" type={isFavorite ? 'fas' : 'far'} />
+                                             </div>
+                                        </button>
+                                    </div>
+                                </div>
+                            )})}
+                        </div>
+                    )}
+                </div>
+            );
         }
-
-        // Save favorites for current show to localStorage
-        function saveFavorites() {
-          localStorage.setItem(`favorites_global`, JSON.stringify([...favorites.value]));
-        }
-
-        // When selectedShow changes: clear search, load show data & favorites
-        watch(selectedShow, async (val) => {
-          if (!val) {
-            showData.value = null;
-            favorites.value = new Set();
-            search.value = '';
-            return;
-          }
-
-          showData.value = null;
-          search.value = '';
-          loading.value = true;
-          error.value = null;
-
-          // Load favorites for this show
-          loadFavorites();
-
-          try {
-            const response = await fetch(`resource/${val}.json`);
-            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-            const data = await response.json();
-            showData.value = data;
-          } catch (e) {
-            error.value = 'Failed to load show data: ' + e.message;
-          } finally {
-            loading.value = false;
-          }
-        });
-
-        const searchResults = computed(() => {
-          if (!search.value.trim() || !showData.value) return [];
-          const q = search.value.toLowerCase();
-          const map = {};
-
-          showData.value.acts.forEach(act => {
-            act.performers.forEach(name => {
-              if (name.toLowerCase().includes(q)) {
-                if (!map[name]) map[name] = [];
-                map[name].push({ number: act.number, title: act.title });
-              }
+        
+        ReactDOM.render(<App />, document.getElementById('root'));
+        
+    </script>
+    <!-- Service Worker Registration Script -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/service-worker.js')
+                    .then(registration => {
+                        console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                    })
+                    .catch(err => {
+                        console.log('ServiceWorker registration failed: ', err);
+                    });
             });
-          });
-
-          let results = Object.entries(map).map(([name, acts]) => ({ name, acts }));
-
-          if (showOnlyFavorites.value) {
-            results = results.filter(r => isFavorite(r.name));
-          }
-
-          return results;
-        });
-
-        const toggleFavorite = (name) => {
-          if (!selectedShow.value) return;
-          if (favorites.value.has(name)) {
-            favorites.value.delete(name);
-          } else {
-            favorites.value.add(name);
-          }
-          saveFavorites();
-        };
-
-        const isFavorite = (name) => favorites.value.has(name);
-
-        // Compute favorite dancers with acts for current show
-        const favoriteResults = computed(() => {
-          if (!showData.value) return [];
-
-          const inShowMap = {};
-          const allPerformers = new Set();
-
-          // Collect who is in the current show
-          showData.value.acts.forEach(act => {
-            act.performers.forEach(name => {
-              allPerformers.add(name);
-              if (!inShowMap[name]) inShowMap[name] = [];
-              inShowMap[name].push({ number: act.number, title: act.title });
-            });
-          });// For each favorite (globally), show info or mark missing
-          return [...favorites.value].map(name => {
-            if (allPerformers.has(name)) {
-              return { name, acts: inShowMap[name], missing: false };
-            } else {
-              return { name, acts: [], missing: true };
-            }
-          });
-        });
-
-        function onSwipe(direction) {
-          if (direction === 'left' && activeTab.value === 'program') {
-            activeTab.value = 'search';
-          } else if (direction === 'right' && activeTab.value === 'search') {
-            activeTab.value = 'program';
-          }
         }
-
-
-        return {
-          search,
-          selectedShow,
-          showData,
-          searchResults,
-          shows,
-          loading,
-          error,
-          favorites,
-          showOnlyFavorites,
-          toggleFavorite,
-          isFavorite,
-          favoriteResults,
-          searchTableHeaders,
-          programHeaders,
-          activeTab,
-          onSwipe
-        };
-      }
-    }).use(vuetify).mount('#app');
-
-    // 👇 Register the swipe directive globally
-    app.directive('touch', {
-      mounted(el, binding) {
-        let startX = 0;
-        el.addEventListener("touchstart", e => {
-          startX = e.changedTouches[0].screenX;
-        });
-        el.addEventListener("touchend", e => {
-          const endX = e.changedTouches[0].screenX;
-          const delta = endX - startX;
-          if (Math.abs(delta) > 50) {
-            const direction = delta > 0 ? 'right' : 'left';
-            if (typeof binding.value === 'function') {
-              binding.value(direction);
-            }
-          }
-        });
-      }
-    });
-  </script>
-  <script>
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('js/service-worker.js')
-        .then(() => console.log('Service Worker Registered'));
-    }
-  </script>
-
+    </script>
 </body>
-
 </html>
