@@ -76,9 +76,9 @@ function App() {
     const [recitalData, setRecitalData] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [currentActNumber, setCurrentActNumber] = useState(null);
+    const [currentAct, setCurrentAct] = useState({ number: null, title: '' });
     const [isTrackerSticky, setIsTrackerSticky] = useState(false);
-
+    
     const touchStartRef = useRef(0);
     const trackerRef = useRef(null);
 
@@ -124,21 +124,26 @@ function App() {
         if (!auth) return;
         auth.signOut().catch(err => console.error("Sign-out failed:", err));
     };
-
+    
     // --- Live Act Number Listener ---
     useEffect(() => {
-        if (!selectedShow || !db) {
-            setCurrentActNumber(null);
+        if (!selectedShow || !db || !showData) {
+            setCurrentAct({ number: null, title: '' });
             return;
         }
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'dancers-pointe-app';
         const docRef = doc(db, `artifacts/${appId}/public/data/show_status`, selectedShow);
         const unsubscribe = onSnapshot(docRef, (docSnap) => {
-            setCurrentActNumber(docSnap.exists() ? docSnap.data().currentActNumber : 1);
+            const actNumber = docSnap.exists() ? docSnap.data().currentActNumber : 1;
+            const act = showData.acts.find(a => a.number === actNumber);
+            setCurrentAct({
+                number: actNumber,
+                title: act ? act.title : 'Act not found'
+            });
         }, (err) => console.error("Firestore snapshot error:", err));
         return () => unsubscribe();
-    }, [selectedShow]);
-
+    }, [selectedShow, showData]);
+    
     const updateCurrentActNumber = async (newNumber) => {
         if (!selectedShow || !db || newNumber < 1 || !isAuthorized) return;
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'dancers-pointe-app';
@@ -202,7 +207,7 @@ function App() {
         });
         return Array.from(favorites).sort().map(name => ({ name, acts: map[name] || [], missing: !all.has(name) }));
     }, [favorites, showData]);
-
+    
     const toggleFavorite = (name) => {
         setFavorites(p => {
             const n = new Set(p);
@@ -219,7 +224,7 @@ function App() {
             else if (delta > 0 && activeTab === 'search') setActiveTab('program');
         }
     };
-
+    
     // --- Render Logic ---
     if (loading) return <div>Loading...</div>;
     if (error) return <div>Error: {error}</div>;
@@ -228,23 +233,14 @@ function App() {
         <>
             <div className={`sticky-tracker ${isTrackerSticky ? 'visible' : ''}`}>
                 <span>Now Performing:</span>
-                <span className="act-number">#{currentActNumber}</span>
+                <span className="act-number">#{currentAct.number} – {currentAct.title}</span>
             </div>
             <div className="container" onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
                 <header className="header" style={{ position: 'relative' }}>
                     <h1>Dancer's Pointe</h1>
                     <p>Recital Program</p>
                     {user && user.isAnonymous && (
-                        <button className="signin-button" onClick={handleSignIn} style={{
-                            position: 'absolute',
-                            top: '0.5rem',
-                            right: '0.5rem',
-                            border: '1px solid #d1d5db',
-                            padding: '0.25rem 0.75rem',
-                            fontSize: '0.75rem',
-                            borderRadius: '0.5rem',
-                            cursor: 'pointer'
-                        }}>
+                         <button className="signin-button" onClick={handleSignIn} style={{marginTop: '1rem'}}>
                             <Icon name="google" type="fab" /> Admin Sign-In
                         </button>
                     )}
@@ -277,14 +273,14 @@ function App() {
                     </div>
                     {selectedShow && (
                         <>
-                            {currentActNumber !== null && (
+                            {currentAct.number !== null && (
                                 <div className="now-performing" ref={trackerRef}>
                                     <h2>Now Performing</h2>
-                                    <div className="act-number">#{currentActNumber}</div>
+                                    <div className="act-number">#{currentAct.number} – {currentAct.title}</div>
                                     {isAuthorized && (
                                         <div className="controls">
-                                            <button onClick={() => updateCurrentActNumber(currentActNumber - 1)}><Icon name="minus" /></button>
-                                            <button onClick={() => updateCurrentActNumber(currentActNumber + 1)}><Icon name="plus" /></button>
+                                            <button onClick={() => updateCurrentActNumber(currentAct.number - 1)}><Icon name="minus" /></button>
+                                            <button onClick={() => updateCurrentActNumber(currentAct.number + 1)}><Icon name="plus" /></button>
                                         </div>
                                     )}
                                 </div>
@@ -302,11 +298,11 @@ function App() {
                                                     <div className="favorite-header">
                                                         <h3>{fav.name}</h3>
                                                         <button onClick={() => toggleFavorite(fav.name)}>
-                                                            <div className="icon-container" style={{ color: '#f59e0b' }}><Icon name="star" type="fas" /></div>
+                                                             <div className="icon-container" style={{color: '#f59e0b'}}><Icon name="star" type="fas"/></div>
                                                         </button>
                                                     </div>
                                                     <div className="favorite-acts">
-                                                        {fav.missing ? <em style={{ color: '#ef4444' }}>Not in this show</em> : fav.acts.map((act, i) => <div key={i}>#{act.number} &mdash; {act.title}</div>)}
+                                                        {fav.missing ? <em style={{color: '#ef4444'}}>Not in this show</em> : fav.acts.map((act, i) => <div key={i}>#{act.number} &mdash; {act.title}</div>)}
                                                     </div>
                                                 </div>
                                             ))
@@ -314,13 +310,13 @@ function App() {
                                     </div>
                                 )}
                             </div>
-                            {activeTab === 'program' ? <ProgramView showData={showData} favorites={favorites} currentActNumber={currentActNumber} /> : <SearchView search={search} setSearch={setSearch} results={searchResults} favorites={favorites} currentActNumber={currentActNumber} />}
+                            {activeTab === 'program' ? <ProgramView showData={showData} favorites={favorites} currentAct={currentAct} /> : <SearchView search={search} setSearch={setSearch} results={searchResults} favorites={favorites} currentAct={currentAct} />}
                         </>
                     )}
                 </main>
                 <nav className="bottom-nav">
                     <button onClick={() => setActiveTab('program')} className={activeTab === 'program' ? 'active' : ''}>
-                        <div className="icon-container"><Icon name="list" /></div>
+                       <div className="icon-container"><Icon name="list" /></div>
                         <span>Program</span>
                     </button>
                     <button onClick={() => setActiveTab('search')} className={activeTab === 'search' ? 'active' : ''}>
@@ -333,14 +329,14 @@ function App() {
     );
 }
 
-function ProgramView({ showData, favorites, currentActNumber }) {
-    if (!showData) return <p style={{ textAlign: 'center', color: '#6b7280', marginTop: '2rem' }}>Select a show to see the program.</p>;
+function ProgramView({ showData, favorites, currentAct }) {
+    if (!showData) return <p style={{textAlign: 'center', color: '#6b7280', marginTop: '2rem'}}>Select a show to see the program.</p>;
     return (
         <div className="program-view">
             <h2>Program</h2>
             {showData.acts.map(act => {
                 const isFav = (act.performers || []).some(p => favorites.has(p));
-                const isCurrent = act.number === currentActNumber;
+                const isCurrent = act.number === currentAct.number;
                 return (
                     <div key={act.number} className={`act-card ${isFav ? 'favorite' : ''} ${isCurrent ? 'current-act' : ''}`}>
                         <p>{act.number} - {act.title}</p>
@@ -352,19 +348,19 @@ function ProgramView({ showData, favorites, currentActNumber }) {
     );
 }
 
-function SearchView({ search, setSearch, results, favorites, currentActNumber }) {
+function SearchView({ search, setSearch, results, favorites, currentAct }) {
     return (
         <div className="search-view">
-            <h2>Search Results</h2>
+             <h2>Search Results</h2>
             <input type="text" placeholder="Search for a dancer..." value={search} onChange={(e) => setSearch(e.target.value)} />
-            {search && results.length === 0 && <p style={{ textAlign: 'center', color: '#6b7280' }}>No dancers found.</p>}
+            {search && results.length === 0 && <p style={{textAlign: 'center', color: '#6b7280'}}>No dancers found.</p>}
             {results.length > 0 && (
                 <div>
                     {results.map(act => {
                         const isFav = (act.performers || []).some(p => favorites.has(p));
-                        const isCurrent = act.number === currentActNumber;
+                        const isCurrent = act.number === currentAct.number;
                         return (
-                            <div key={`${act.number}-search`} className={`act-card ${isFav ? 'favorite' : ''} ${isCurrent ? 'current-act' : ''} ${act.performers.length === 0 ? 'no-performers' : ''}`}>
+                            <div key={`${act.number}-search`} className={`act-card ${isFav ? 'favorite' : ''} ${isCurrent ? 'current-act' : ''}`}>
                                 <p>{act.number} - {act.title}</p>
                                 {act.performers && act.performers.length > 0 && <div className="performers"><strong>Performers:</strong> {act.performers.join(', ')}</div>}
                             </div>
