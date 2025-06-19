@@ -1,11 +1,11 @@
 {
-  "name": "Dance Recital Lookup",
-  "short_name": "Recital Lookup",
+  "name": "Dancer's Pointe Recital App",
+  "short_name": "Dancer's Pointe App",
   "start_url": ".",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#1976d2",
-  "description": "Search and favorite performers from the dance recital.",
+  "description": "Easily search, explore, and favorite dancers in this year's Dancer’s Pointe Recital. Select a show to view the full program, find performers by name, and keep track of your favorites with one tap. Designed for mobile-first browsing with a clean, modern layout.",
   "icons": [
     {
       "src": "image/icon-192.png",

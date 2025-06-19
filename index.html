@@ -4,7 +4,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Dancer's Pointe Recital Search</title>
+  <meta name="description" content="Search and explore the Dancer's Pointe Recital program by show or performer. Mobile-friendly design with quick access to favorites and full act details." />
+  <title>Dancer's Pointe Recital</title>
   <link rel="manifest" href="manifest.json" />
   <link href="https://cdn.jsdelivr.net/npm/vuetify@3.3.8/dist/vuetify.min.css" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet" />
@@ -33,7 +34,7 @@
   <div id="app">
     <v-app>
       <v-container>
-        <h1>Dancer's Pointe Recital Search</h1>
+        <h1 class="text-h4 text-md-h4 text-lg-h4 font-weight-bold text-center mb-4">Dancer's Pointe Recital</h1>
 
         <v-select label="Select Show" v-model="selectedShow" :items="shows" item-title="label" item-value="value"
           outlined dense></v-select>
