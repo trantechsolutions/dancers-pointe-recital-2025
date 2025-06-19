@@ -5,10 +5,11 @@ const CACHE_NAME = 'dancers-pointe-recital-v1';
 const urlsToCache = [
   '/',
   'index.html',
-  'dance_shows.json',
+  'recital_data.dat',
   'manifest.json',
   '/image/icon-192.png',
-  '/image/icon-512.png'
+  '/image/icon-512.png',
+  '/css/custom.css'
 ];
 
 // Install event: opens the cache and adds the core files to it.
