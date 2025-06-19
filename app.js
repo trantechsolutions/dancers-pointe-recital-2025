@@ -3,13 +3,13 @@ const { useState, useEffect, useMemo, useRef } = React;
 // --- Firebase Config ---
 // In a real app, use your own configuration.
 const firebaseConfig = {
-  apiKey: "AIzaSyA0arXDa5VPDNWsPDAh2Z8QP_KmqIZgG38",
-  authDomain: "dancers-pointe-recital-app.firebaseapp.com",
-  projectId: "dancers-pointe-recital-app",
-  storageBucket: "dancers-pointe-recital-app.firebasestorage.app",
-  messagingSenderId: "212532918929",
-  appId: "1:212532918929:web:3f0d4d028b2b585f545d30",
-  measurementId: "G-V6QL57FMGS"
+    apiKey: "AIzaSyA0arXDa5VPDNWsPDAh2Z8QP_KmqIZgG38",
+    authDomain: "dancers-pointe-recital-app.firebaseapp.com",
+    projectId: "dancers-pointe-recital-app",
+    storageBucket: "dancers-pointe-recital-app.firebasestorage.app",
+    messagingSenderId: "212532918929",
+    appId: "1:212532918929:web:3f0d4d028b2b585f545d30",
+    measurementId: "G-V6QL57FMGS"
 };
 
 // --- Authorized Users ---
@@ -78,7 +78,7 @@ function App() {
     const [error, setError] = useState(null);
     const [currentActNumber, setCurrentActNumber] = useState(null);
     const [isTrackerSticky, setIsTrackerSticky] = useState(false);
-    
+
     const touchStartRef = useRef(0);
     const trackerRef = useRef(null);
 
@@ -124,7 +124,7 @@ function App() {
         if (!auth) return;
         auth.signOut().catch(err => console.error("Sign-out failed:", err));
     };
-    
+
     // --- Live Act Number Listener ---
     useEffect(() => {
         if (!selectedShow || !db) {
@@ -138,7 +138,7 @@ function App() {
         }, (err) => console.error("Firestore snapshot error:", err));
         return () => unsubscribe();
     }, [selectedShow]);
-    
+
     const updateCurrentActNumber = async (newNumber) => {
         if (!selectedShow || !db || newNumber < 1 || !isAuthorized) return;
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'dancers-pointe-app';
@@ -202,7 +202,7 @@ function App() {
         });
         return Array.from(favorites).sort().map(name => ({ name, acts: map[name] || [], missing: !all.has(name) }));
     }, [favorites, showData]);
-    
+
     const toggleFavorite = (name) => {
         setFavorites(p => {
             const n = new Set(p);
@@ -219,7 +219,7 @@ function App() {
             else if (delta > 0 && activeTab === 'search') setActiveTab('program');
         }
     };
-    
+
     // --- Render Logic ---
     if (loading) return <div>Loading...</div>;
     if (error) return <div>Error: {error}</div>;
@@ -235,7 +235,16 @@ function App() {
                     <h1>Dancer's Pointe</h1>
                     <p>Recital Program</p>
                     {user && user.isAnonymous && (
-                         <button className="signin-button" onClick={handleSignIn} style={{marginTop: '1rem'}}>
+                        <button className="signin-button" onClick={handleSignIn} style={{
+                            position: 'absolute',
+                            top: '0.5rem',
+                            right: '0.5rem',
+                            border: '1px solid #d1d5db',
+                            padding: '0.25rem 0.75rem',
+                            fontSize: '0.75rem',
+                            borderRadius: '0.5rem',
+                            cursor: 'pointer'
+                        }}>
                             <Icon name="google" type="fab" /> Admin Sign-In
                         </button>
                     )}
@@ -293,11 +302,11 @@ function App() {
                                                     <div className="favorite-header">
                                                         <h3>{fav.name}</h3>
                                                         <button onClick={() => toggleFavorite(fav.name)}>
-                                                             <div className="icon-container" style={{color: '#f59e0b'}}><Icon name="star" type="fas"/></div>
+                                                            <div className="icon-container" style={{ color: '#f59e0b' }}><Icon name="star" type="fas" /></div>
                                                         </button>
                                                     </div>
                                                     <div className="favorite-acts">
-                                                        {fav.missing ? <em style={{color: '#ef4444'}}>Not in this show</em> : fav.acts.map((act, i) => <div key={i}>#{act.number} &mdash; {act.title}</div>)}
+                                                        {fav.missing ? <em style={{ color: '#ef4444' }}>Not in this show</em> : fav.acts.map((act, i) => <div key={i}>#{act.number} &mdash; {act.title}</div>)}
                                                     </div>
                                                 </div>
                                             ))
@@ -311,7 +320,7 @@ function App() {
                 </main>
                 <nav className="bottom-nav">
                     <button onClick={() => setActiveTab('program')} className={activeTab === 'program' ? 'active' : ''}>
-                       <div className="icon-container"><Icon name="list" /></div>
+                        <div className="icon-container"><Icon name="list" /></div>
                         <span>Program</span>
                     </button>
                     <button onClick={() => setActiveTab('search')} className={activeTab === 'search' ? 'active' : ''}>
@@ -325,7 +334,7 @@ function App() {
 }
 
 function ProgramView({ showData, favorites, currentActNumber }) {
-    if (!showData) return <p style={{textAlign: 'center', color: '#6b7280', marginTop: '2rem'}}>Select a show to see the program.</p>;
+    if (!showData) return <p style={{ textAlign: 'center', color: '#6b7280', marginTop: '2rem' }}>Select a show to see the program.</p>;
     return (
         <div className="program-view">
             <h2>Program</h2>
@@ -346,9 +355,9 @@ function ProgramView({ showData, favorites, currentActNumber }) {
 function SearchView({ search, setSearch, results, favorites, currentActNumber }) {
     return (
         <div className="search-view">
-             <h2>Search Results</h2>
+            <h2>Search Results</h2>
             <input type="text" placeholder="Search for a dancer..." value={search} onChange={(e) => setSearch(e.target.value)} />
-            {search && results.length === 0 && <p style={{textAlign: 'center', color: '#6b7280'}}>No dancers found.</p>}
+            {search && results.length === 0 && <p style={{ textAlign: 'center', color: '#6b7280' }}>No dancers found.</p>}
             {results.length > 0 && (
                 <div>
                     {results.map(act => {
