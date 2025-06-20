@@ -240,7 +240,18 @@ function App() {
                     <h1>Dancer's Pointe</h1>
                     <p>Recital Program</p>
                     {user && user.isAnonymous && (
-                         <button className="signin-button" onClick={handleSignIn} style={{marginTop: '1rem'}}>
+                         <button className="signin-button" onClick={handleSignIn} style={{
+                                position: 'absolute',
+                                top: '0.5rem',
+                                right: '0.5rem',
+                                background: 'none',
+                                border: '1px solid #d1d5db',
+                                color: '#4b5563',
+                                padding: '0.25rem 0.75rem',
+                                fontSize: '0.75rem',
+                                borderRadius: '0.5rem',
+                                cursor: 'pointer'
+                            }}>
                             <Icon name="google" type="fab" /> Admin Sign-In
                         </button>
                     )}
