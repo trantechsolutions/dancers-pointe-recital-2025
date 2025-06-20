@@ -1,18 +1,6 @@
 const { useState, useEffect, useMemo, useRef } = React;
 
-// --- Firebase Config ---
-// IMPORTANT: Replace with your own Firebase project configuration.
-const firebaseConfig = {
-    apiKey: "AIzaSyA0arXDa5VPDNWsPDAh2Z8QP_KmqIZgG38",
-    authDomain: "dancers-pointe-recital-app.firebaseapp.com",
-    projectId: "dancers-pointe-recital-app",
-    storageBucket: "dancers-pointe-recital-app.appspot.com",
-    messagingSenderId: "212532918929",
-    appId: "1:212532918929:web:3f0d4d028b2b585f545d30"
-};
-
-// --- Authorized Users ---
-const authorizedUsers = ["jonny5v@gmail.com", "user2@example.com"];
+// --- Firebase Config is in config.js ---
 
 // --- Firebase Services ---
 const {
@@ -36,7 +24,7 @@ try {
     db = getFirestore(app);
     provider = new GoogleAuthProvider();
 } catch (e) {
-    console.error("Firebase initialization failed. Please provide your configuration details in app.js.");
+    console.error("Firebase initialization failed. Make sure config.js is loaded correctly and contains your configuration details.");
 }
 
 // Reusable Icon Component
@@ -66,7 +54,8 @@ const formatShowDateTime = (datetime) => new Date(datetime).toLocaleDateString('
 function App() {
     const [user, setUser] = useState(null);
     const [isAuthorized, setIsAuthorized] = useState(false);
-    const [search, setSearch] = useState('');
+    const [dancerSearch, setDancerSearch] = useState('');
+    const [actSearch, setActSearch] = useState('');
     const [selectedShow, setSelectedShow] = useState('');
     const [favorites, setFavorites] = useState(new Set());
     const [activeTab, setActiveTab] = useState('program');
@@ -84,8 +73,7 @@ function App() {
     useEffect(() => {
         const handleScroll = () => {
             if (trackerRef.current) {
-                const trackerTop = trackerRef.current.getBoundingClientRect().top;
-                setIsTrackerSticky(trackerTop < 0);
+                setIsTrackerSticky(trackerRef.current.getBoundingClientRect().top < 0);
             } else {
                 setIsTrackerSticky(false);
             }
@@ -124,7 +112,7 @@ function App() {
             setCurrentAct({ number: null, title: '', isTracking: false });
             return;
         }
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'dancers-pointe-app';
+        const appId = 'dancers-pointe-app';
         const docRef = doc(db, `artifacts/${appId}/public/data/show_status`, selectedShow);
         const unsubscribe = onSnapshot(docRef, (docSnap) => {
             const data = docSnap.exists() ? docSnap.data() : { currentActNumber: 1, isTracking: false };
@@ -140,7 +128,7 @@ function App() {
     
     const updateCurrentActNumber = async (newNumber) => {
         if (!selectedShow || !db || newNumber < 1 || !isAuthorized) return;
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'dancers-pointe-app';
+        const appId = 'dancers-pointe-app';
         const docRef = doc(db, `artifacts/${appId}/public/data/show_status`, selectedShow);
         try {
             await setDoc(docRef, { currentActNumber: newNumber, isTracking: true }, { merge: true });
@@ -151,7 +139,7 @@ function App() {
     
     const toggleTracking = async () => {
         if (!selectedShow || !db || !isAuthorized) return;
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'dancers-pointe-app';
+        const appId = 'dancers-pointe-app';
         const docRef = doc(db, `artifacts/${appId}/public/data/show_status`, selectedShow);
         try {
              await setDoc(docRef, { isTracking: !currentAct.isTracking }, { merge: true });
@@ -187,9 +175,9 @@ function App() {
     const shows = useMemo(() => recitalData ? Object.keys(recitalData).map(k => ({ label: recitalData[k].label, value: k })) : [], [recitalData]);
     const showData = selectedShow ? recitalData[selectedShow] : null;
 
-    const searchResults = useMemo(() => {
-        if (!search.trim() || !showData) return [];
-        const q = search.toLowerCase();
+    const dancerSearchResults = useMemo(() => {
+        if (!dancerSearch.trim() || !showData) return [];
+        const q = dancerSearch.toLowerCase();
         const map = {};
         showData.acts.forEach(act => {
             (act.performers || []).forEach(name => {
@@ -200,7 +188,17 @@ function App() {
             });
         });
         return Object.entries(map).map(([name, acts]) => ({ name, acts })).sort((a,b) => a.name.localeCompare(b.name));
-    }, [search, showData]);
+    }, [dancerSearch, showData]);
+
+    const actSearchResults = useMemo(() => {
+        if (!actSearch.trim() || !showData) return [];
+        const q = actSearch.toLowerCase();
+        return showData.acts.filter(act => 
+            act.title.toLowerCase().includes(q) || 
+            String(act.number).includes(q) ||
+            (act.performers || []).some(p => p.toLowerCase().includes(q))
+        );
+    }, [actSearch, showData]);
 
     const favoriteResults = useMemo(() => {
         if (!showData) return [];
@@ -228,8 +226,15 @@ function App() {
     const handleTouchEnd = (e) => {
         const delta = e.changedTouches[0].clientX - touchStartRef.current;
         if (Math.abs(delta) > 50) {
-            if (delta < 0 && activeTab === 'program') setActiveTab('search');
-            else if (delta > 0 && activeTab === 'search') setActiveTab('program');
+            const tabs = ['program', 'searchActs', 'searchDancers'];
+            const currentIndex = tabs.indexOf(activeTab);
+            if (delta < 0) { // Swipe Left
+                const nextIndex = (currentIndex + 1) % tabs.length;
+                setActiveTab(tabs[nextIndex]);
+            } else { // Swipe Right
+                const nextIndex = (currentIndex - 1 + tabs.length) % tabs.length;
+                setActiveTab(tabs[nextIndex]);
+            }
         }
     };
     
@@ -237,13 +242,34 @@ function App() {
     if (loading) return <div>Loading...</div>;
     if (error) return <div>Error: {error}</div>;
 
+    const renderActiveTab = () => {
+        switch (activeTab) {
+            case 'program':
+                return <ProgramView showData={showData} favorites={favorites} currentAct={currentAct} />;
+            case 'searchActs':
+                return <SearchActView search={actSearch} setSearch={setActSearch} results={actSearchResults} favorites={favorites} currentAct={currentAct} />;
+            case 'searchDancers':
+                 return <SearchDancerView search={dancerSearch} setSearch={setDancerSearch} results={dancerSearchResults} favorites={favorites} toggleFavorite={toggleFavorite} />;
+            default:
+                return <ProgramView showData={showData} favorites={favorites} currentAct={currentAct} />;
+        }
+    };
+
     return (
         <>
             {currentAct.isTracking && (
                 <div className={`sticky-tracker ${isTrackerSticky ? 'visible' : ''}`}>
-                    <span>Now Performing:</span>
-                    <span className="act-number">#{currentAct.number}</span>
-                    <span className="act-title">{currentAct.title}</span>
+                    <div className="sticky-tracker-info">
+                        <span>Now Performing:</span>
+                        <span className="act-number">#{currentAct.number}</span>
+                        <span className="act-title">{currentAct.title}</span>
+                    </div>
+                    {isAuthorized && (
+                        <div className="controls">
+                            <button onClick={() => updateCurrentActNumber(currentAct.number - 1)}><Icon name="minus" /></button>
+                            <button onClick={() => updateCurrentActNumber(currentAct.number + 1)}><Icon name="plus" /></button>
+                        </div>
+                    )}
                 </div>
             )}
             <div className="container" onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
@@ -319,10 +345,7 @@ function App() {
                                     </div>
                                 )}
                             </div>
-                            {activeTab === 'program' ? 
-                                <ProgramView showData={showData} favorites={favorites} currentAct={currentAct} /> : 
-                                <SearchView search={search} setSearch={setSearch} results={searchResults} favorites={favorites} toggleFavorite={toggleFavorite} />
-                            }
+                            {renderActiveTab()}
                         </>
                     )}
                 </main>
@@ -331,9 +354,13 @@ function App() {
                        <div className="icon-container"><Icon name="list" /></div>
                         <span>Program</span>
                     </button>
-                    <button onClick={() => setActiveTab('search')} className={activeTab === 'search' ? 'active' : ''}>
-                        <div className="icon-container"><Icon name="search" /></div>
-                        <span>Search</span>
+                     <button onClick={() => setActiveTab('searchActs')} className={activeTab === 'searchActs' ? 'active' : ''}>
+                        <div className="icon-container"><Icon name="magnifying-glass" /></div>
+                        <span>Acts</span>
+                    </button>
+                    <button onClick={() => setActiveTab('searchDancers')} className={activeTab === 'searchDancers' ? 'active' : ''}>
+                        <div className="icon-container"><Icon name="user-group" /></div>
+                        <span>Dancers</span>
                     </button>
                 </nav>
             </div>
@@ -360,10 +387,34 @@ function ProgramView({ showData, favorites, currentAct }) {
     );
 }
 
-function SearchView({ search, setSearch, results, favorites, toggleFavorite }) {
+function SearchActView({ search, setSearch, results, favorites, currentAct }) {
     return (
         <div className="search-view">
-             <h2>Search Results</h2>
+             <h2>Search Acts</h2>
+            <input type="text" placeholder="Search by act, title, or dancer..." value={search} onChange={(e) => setSearch(e.target.value)} />
+            {search && results.length === 0 && <p style={{textAlign: 'center', color: '#6b7280'}}>No acts found.</p>}
+            {results.length > 0 && (
+                <div>
+                    {results.map(act => {
+                        const isFav = (act.performers || []).some(p => favorites.has(p));
+                        const isCurrent = currentAct.isTracking && act.number === currentAct.number;
+                        return (
+                            <div key={`${act.number}-search`} className={`act-card ${isFav ? 'favorite' : ''} ${isCurrent ? 'current-act' : ''}`}>
+                                <p>{act.number} - {act.title}</p>
+                                {act.performers && act.performers.length > 0 && <div className="performers"><strong>Performers:</strong> {act.performers.join(', ')}</div>}
+                            </div>
+                        )
+                    })}
+                </div>
+            )}
+        </div>
+    );
+}
+
+function SearchDancerView({ search, setSearch, results, favorites, toggleFavorite }) {
+    return (
+        <div className="search-view">
+             <h2>Search Dancers</h2>
             <input type="text" placeholder="Search for a dancer..." value={search} onChange={(e) => setSearch(e.target.value)} />
             {search && results.length === 0 && <p style={{textAlign: 'center', color: '#6b7280'}}>No dancers found.</p>}
             {results.length > 0 && (
@@ -393,5 +444,6 @@ function SearchView({ search, setSearch, results, favorites, toggleFavorite }) {
         </div>
     );
 }
+
 
 ReactDOM.render(<App />, document.getElementById('root'));

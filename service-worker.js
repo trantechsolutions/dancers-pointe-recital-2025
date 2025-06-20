@@ -11,6 +11,7 @@ const urlsToCache = [
   'icon-512.png',
   'style.css',
   'app.js',
+  'config.js',
 ];
 
 // Install event: opens the cache and adds the core files to it.
