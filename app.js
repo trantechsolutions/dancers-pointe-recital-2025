@@ -321,7 +321,7 @@ function App() {
                                     </div>
                                 )}
                             </div>
-                            {activeTab === 'program' ? <ProgramView showData={showData} favorites={favorites} currentAct={currentAct} /> : <SearchView search={search} setSearch={setSearch} results={searchResults} favorites={favorites} currentAct={currentAct} />}
+                            {activeTab === 'program' ? <ProgramView showData={showData} favorites={favorites} currentAct={currentAct} /> : <SearchView search={search} setSearch={setSearch} results={searchResults} favorites={favorites} toggleFavorite={toggleFavorite} />}
                         </>
                     )}
                 </main>
@@ -359,28 +359,37 @@ function ProgramView({ showData, favorites, currentAct }) {
     );
 }
 
-function SearchView({ search, setSearch, results, favorites, currentAct }) {
-    return (
-        <div className="search-view">
-             <h2>Search Results</h2>
-            <input type="text" placeholder="Search for a dancer..." value={search} onChange={(e) => setSearch(e.target.value)} />
-            {search && results.length === 0 && <p style={{textAlign: 'center', color: '#6b7280'}}>No dancers found.</p>}
-            {results.length > 0 && (
-                <div>
-                    {results.map(act => {
-                        const isFav = (act.performers || []).some(p => favorites.has(p));
-                        const isCurrent = act.number === currentAct.number;
-                        return (
-                            <div key={`${act.number}-search`} className={`act-card ${isFav ? 'favorite' : ''} ${isCurrent ? 'current-act' : ''}`}>
-                                <p>{act.number} - {act.title}</p>
-                                {act.performers && act.performers.length > 0 && <div className="performers"><strong>Performers:</strong> {act.performers.join(', ')}</div>}
-                            </div>
-                        )
-                    })}
+function SearchView({ search, setSearch, results, favorites, toggleFavorite }) {
+            return (
+                <div className="search-view">
+                     <h2>Search</h2>
+                    <input type="text" placeholder="Search for a dancer..." value={search} onChange={(e) => setSearch(e.target.value)} />
+                    {search && results.length === 0 && <p style={{textAlign: 'center', color: '#6b7280'}}>No dancers found matching "{search}"</p>}
+                    {results.length > 0 && (
+                        <div>
+                            {results.map(result => {
+                                const isFavorite = favorites.has(result.name);
+                                return (
+                                <div key={result.name} className="search-result-item">
+                                    <div className="search-result-header">
+                                        <div style={{flex: 1}}>
+                                            <h3>{result.name}</h3>
+                                            <div className="favorite-acts">
+                                                {result.acts.map((act, i) => <div key={i}>#{act.number} &mdash; {act.title}</div>)}
+                                            </div>
+                                        </div>
+                                        <button onClick={() => toggleFavorite(result.name)}>
+                                             <div className="icon-container" style={{ color: isFavorite ? '#f59e0b' : '#9ca3af' }}>
+                                                <Icon name="star" type={isFavorite ? 'fas' : 'far'} />
+                                             </div>
+                                        </button>
+                                    </div>
+                                </div>
+                            )})}
+                        </div>
+                    )}
                 </div>
-            )}
-        </div>
-    );
-}
+            );
+        }
 
 ReactDOM.render(<App />, document.getElementById('root'));
