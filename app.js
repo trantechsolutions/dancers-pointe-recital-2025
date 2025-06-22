@@ -65,10 +65,29 @@ function App() {
     const [error, setError] = useState(null);
     const [currentAct, setCurrentAct] = useState({ number: null, title: '', isTracking: false });
     const [isTrackerSticky, setIsTrackerSticky] = useState(false);
+    const [theme, setTheme] = useState(localStorage.getItem('theme') || 'system');
     
     const touchStartRef = useRef(0);
     const trackerRef = useRef(null);
 
+    // --- Theme Management ---
+    useEffect(() => {
+        const applyTheme = (t) => {
+            if (t === 'dark' || (t === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.body.classList.add('dark');
+            } else {
+                document.body.classList.remove('dark');
+            }
+        };
+        applyTheme(theme);
+        localStorage.setItem('theme', theme);
+
+        const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+        const handleChange = () => applyTheme(theme);
+        mediaQuery.addEventListener('change', handleChange);
+        return () => mediaQuery.removeEventListener('change', handleChange);
+    }, [theme]);
+    
     // --- Sticky Header Scroll Listener ---
     useEffect(() => {
         const handleScroll = () => {
@@ -222,13 +241,15 @@ function App() {
         });
     };
 
-    const handleTouchStart = (e) => { touchStartRef.current = e.targetTouches[0].clientX; };
+    const handleTouchStart = (e) => { touchStartRef.current = { x: e.targetTouches[0].clientX, y: e.targetTouches[0].clientY }; };
     const handleTouchEnd = (e) => {
-        const delta = e.changedTouches[0].clientX - touchStartRef.current;
-        if (Math.abs(delta) > 50) {
+        const deltaX = e.changedTouches[0].clientX - touchStartRef.current.x;
+        const deltaY = e.changedTouches[0].clientY - touchStartRef.current.y;
+        
+        if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 50) {
             const tabs = ['program', 'searchActs', 'searchDancers'];
             const currentIndex = tabs.indexOf(activeTab);
-            if (delta < 0) { // Swipe Left
+            if (deltaX < 0) { // Swipe Left
                 const nextIndex = (currentIndex + 1) % tabs.length;
                 setActiveTab(tabs[nextIndex]);
             } else { // Swipe Right
@@ -273,16 +294,21 @@ function App() {
                 </div>
             )}
             <div className="container" onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
-                <header className="header" style={{ position: 'relative' }}>
+                <header className="header">
+                    <div className="theme-switcher">
+                        <button onClick={() => setTheme('light')} className={theme === 'light' ? 'active' : ''}>Light</button>
+                        <button onClick={() => setTheme('dark')} className={theme === 'dark' ? 'active' : ''}>Dark</button>
+                        <button onClick={() => setTheme('system')} className={theme === 'system' ? 'active' : ''}>System</button>
+                    </div>
                     <h1>Dancer's Pointe</h1>
                     <p>Recital Program</p>
                     {user && user.isAnonymous && (
-                        <button className="signin-button" onClick={handleSignIn} style={{position: 'absolute', top: '0.5rem', right: '0.5rem'}}>
+                        <button className="signin-button" onClick={handleSignIn}>
                             <Icon name="google" type="fab" /> Admin
                         </button>
                     )}
                     {user && !user.isAnonymous && (
-                        <button onClick={handleSignOut} className="signin-button" style={{position: 'absolute', top: '0.5rem', right: '0.5rem'}}>
+                        <button onClick={handleSignOut} className="signin-button">
                             Sign Out
                         </button>
                     )}
@@ -333,7 +359,7 @@ function App() {
                                                     <div className="favorite-header">
                                                         <h3>{fav.name}</h3>
                                                         <button onClick={() => toggleFavorite(fav.name)}>
-                                                             <div className="icon-container" style={{color: '#f59e0b'}}><Icon name="star" type="fas"/></div>
+                                                             <div className="icon-container" style={{color: '#db2777'}}><Icon name="star" type="fas"/></div>
                                                         </button>
                                                     </div>
                                                     <div className="favorite-acts">
@@ -431,7 +457,7 @@ function SearchDancerView({ search, setSearch, results, favorites, toggleFavorit
                                         </div>
                                     </div>
                                     <button onClick={() => toggleFavorite(result.name)}>
-                                         <div className="icon-container" style={{ color: isFavorite ? '#f59e0b' : '#9ca3af' }}>
+                                         <div className="icon-container" style={{ color: isFavorite ? '#db2777' : '#9ca3af' }}>
                                             <Icon name="star" type={isFavorite ? 'fas' : 'far'} />
                                          </div>
                                     </button>

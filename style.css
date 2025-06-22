@@ -4,6 +4,7 @@ body {
     margin: 0;
     background-color: #f9fafb;
     color: #1f2937;
+    transition: background-color 0.3s, color 0.3s;
 }
 
 .container {
@@ -16,6 +17,7 @@ body {
 .header {
     text-align: center;
     margin-bottom: 1.5rem;
+    position: relative;
 }
 
 .header h1 {
@@ -31,6 +33,34 @@ body {
     margin-top: 0;
 }
 
+/* --- Theme Switcher --- */
+.theme-switcher {
+    position: absolute;
+    top: 0.5rem;
+    left: 0.5rem;
+    display: flex;
+    background-color: #e5e7eb;
+    border-radius: 9999px;
+    padding: 0.25rem;
+}
+
+.theme-switcher button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.25rem 0.5rem;
+    color: #4b5563;
+    font-size: 0.75rem;
+    border-radius: 9999px;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.theme-switcher button.active {
+    background-color: #ffffff;
+    color: #1f2937;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
 /* --- Sign-In Button --- */
 .signin-button {
     background: none;
@@ -43,6 +73,9 @@ body {
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
 }
 
 /* --- Admin Controls --- */
@@ -168,7 +201,7 @@ body {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    max-width: 150px; /* Adjust as needed */
+    max-width: 150px;
 }
 
 .sticky-tracker .controls button {
@@ -224,6 +257,7 @@ select {
     border-radius: 0.5rem;
     box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
     overflow: hidden;
+    background-color: #ffffff;
 }
 
 .favorites-toggle {
@@ -232,11 +266,12 @@ select {
     justify-content: space-between;
     align-items: center;
     padding: 0.75rem;
-    background-color: #ffffff;
+    background-color: transparent;
     border: none;
     cursor: pointer;
     font-size: 1.125rem;
     font-weight: 600;
+    color: inherit; /* Inherit color from parent */
 }
 
 .favorites-toggle:hover {
@@ -422,4 +457,91 @@ select {
 
 .favorites-toggle.expanded .icon-container {
     transform: rotate(180deg);
+}
+
+
+/* --- Dark Theme --- */
+body.dark {
+    background-color: #111827;
+    color: #e5e7eb; /* Brighter base text color for readability */
+}
+
+body.dark .header p, 
+body.dark .favorite-acts,
+body.dark .performers {
+    color: #9ca3af; /* Softer text for secondary info */
+}
+
+body.dark select, 
+body.dark .search-view input {
+    background-color: #1f2937;
+    border-color: #4b5563;
+    color: #e5e7eb;
+}
+
+body.dark select {
+    background-image: url("data:image/svg+xml;charset=UTF-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%23d1d5db'><path fill-rule='evenodd' d='M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z' clip-rule='evenodd' /></svg>");
+}
+
+body.dark .favorites-section,
+body.dark .act-card,
+body.dark .search-result-item {
+    background-color: #1f2937;
+    border-color: #4b5563;
+}
+
+body.dark .favorites-toggle {
+    color: #e5e7eb; /* Explicitly set font color for dark mode */
+}
+
+body.dark .favorites-toggle:hover {
+    background-color: #374151;
+}
+
+body.dark .favorites-content {
+    border-top-color: #4b5563;
+}
+
+body.dark .favorite-item {
+    background-color: #374151;
+}
+
+body.dark .act-card.favorite {
+    background-color: #312028;
+}
+
+body.dark .act-card.no-performers {
+    background-color: #423d1d;
+}
+
+body.dark .bottom-nav {
+    background-color: #1f2937;
+    border-top-color: #4b5563;
+}
+
+body.dark .bottom-nav button {
+    color: #9ca3af;
+}
+
+body.dark .bottom-nav button.active {
+    color: #f9a8d4;
+    border-top-color: #f9a8d4;
+}
+
+body.dark .theme-switcher {
+    background-color: #374151;
+}
+
+body.dark .theme-switcher button {
+    color: #d1d5db;
+}
+
+body.dark .theme-switcher button.active {
+    background-color: #4b5563;
+    color: #f9fafb;
+}
+
+body.dark .signin-button {
+    color: #d1d5db;
+    border-color: #4b5563;
 }
