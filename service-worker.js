@@ -1,5 +1,5 @@
 // A unique name for the cache
-const CACHE_NAME = 'dancers-pointe-recital-v1';
+const CACHE_NAME = 'dancers-pointe-recital-v1.3';
 
 // The list of files to cache on install
 const urlsToCache = [
