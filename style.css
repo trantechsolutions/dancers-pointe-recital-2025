@@ -1,183 +1,48 @@
-/* --- General Body and Container --- */
+/* --- Custom App Styles --- */
+:root {
+    --primary-color: #db2777;
+    --primary-light: #f9a8d4;
+    --primary-rgb: 219, 39, 119; /* RGB value for pink theme */
+    --text-light: #f9fafb;
+    --text-dark: #1f2937;
+    --bg-light: #f9fafb;
+    --bg-dark: #111827;
+    --surface-light: #ffffff;
+    --surface-dark: #1f2937;
+    --border-light: #e5e7eb;
+    --border-dark: #4b5563;
+}
+
 body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-    margin: 0;
-    background-color: #f9fafb;
-    color: #1f2937;
     transition: background-color 0.3s, color 0.3s;
 }
 
-.container {
-    max-width: 640px;
-    margin: 0 auto;
-    padding: 1rem 1rem 6rem 1rem;
-}
-
-/* --- Header & Title --- */
-.header {
-    text-align: center;
-    margin-bottom: 1.5rem;
-    position: relative;
-}
-
+/* Custom header color */
 .header h1 {
-    font-size: 2.25rem;
-    font-weight: bold;
-    color: #db2777;
-    margin-bottom: 0.25rem;
+    color: var(--primary-color);
 }
 
-.header p {
-    font-size: 1rem;
-    color: #6b7280;
-    margin-top: 0;
-}
-
-/* --- Settings View --- */
-.settings-view h2 {
-    font-size: 1.5rem;
-    font-weight: bold;
-    margin-bottom: 1.5rem;
-}
-.settings-section {
-    margin-bottom: 2rem;
-}
-.settings-section h3 {
-    font-size: 1rem;
-    font-weight: 600;
-    margin-bottom: 0.75rem;
-    color: #4b5563;
-}
-.theme-switcher {
-    display: flex;
-    background-color: #e5e7eb;
-    border-radius: 9999px;
-    padding: 0.25rem;
-    width: fit-content;
-}
-
-.theme-switcher button {
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 0.5rem 1rem;
-    color: #4b5563;
-    font-size: 0.875rem;
-    font-weight: 500;
-    border-radius: 9999px;
-    transition: background-color 0.2s, color 0.2s;
-}
-
-.theme-switcher button.active {
-    background-color: #ffffff;
-    color: #1f2937;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-}
-.signin-button.large {
-    width: 100%;
-    padding: 0.75rem;
-    font-size: 1rem;
-    background-color: #4285F4;
-    color: white;
-    border: none;
-}
-.signin-button.large:hover {
-     background-color: #357ae8;
-}
-
-/* --- Admin Controls --- */
-.admin-controls {
-    text-align: center;
-    margin-bottom: 1rem;
-}
-
-.tracking-toggle-button {
-    width: 100%;
-    padding: 0.75rem;
-    font-size: 1rem;
-    font-weight: 600;
-    border-radius: 0.5rem;
-    border: none;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-.tracking-toggle-button.off {
-    background-color: #22c55e;
-    color: white;
-}
-
-.tracking-toggle-button.on {
-    background-color: #ef4444;
-    color: white;
-}
-
-
-/* --- Now Performing Tracker --- */
+/* Custom tracker styles */
 .now-performing {
-    background-color: #db2777;
-    color: white;
-    padding: 1rem;
-    border-radius: 0.5rem;
-    margin-bottom: 1rem;
-    text-align: center;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    background-color: var(--primary-color);
 }
 
-.now-performing h2 {
-    margin: 0 0 0.5rem 0;
-    font-size: 1rem;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
+.act-card.current-act {
+    border: 3px solid var(--primary-color);
+    transform: scale(1.02);
 }
 
-.now-performing .act-number {
-    font-size: 3rem;
-    font-weight: bold;
-    line-height: 1;
+.act-card.favorite {
+    border-left: 5px solid var(--primary-color);
 }
 
-.now-performing .act-title {
-    font-size: 1.25rem;
-    font-weight: 500;
-    margin-top: 0.25rem;
-}
-
-.now-performing .controls {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 1rem;
-}
-
-.now-performing .controls button {
-    background-color: white;
-    color: #db2777;
-    border: none;
-    border-radius: 50%;
-    width: 2.5rem;
-    height: 2.5rem;
-    font-size: 1.5rem;
-    line-height: 2.5rem;
-    cursor: pointer;
-    margin: 0 0.5rem;
-    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2);
-}
-
-/* --- Sticky Tracker Bar --- */
 .sticky-tracker {
+    background-color: var(--primary-color);
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
-    background-color: #db2777;
-    color: white;
-    padding: 0.5rem 1rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-    z-index: 1000;
+    z-index: 1050; /* Above Bootstrap nav */
     transform: translateY(-100%);
     transition: transform 0.3s ease-in-out;
 }
@@ -186,375 +51,124 @@ body {
     transform: translateY(0);
 }
 
-.sticky-tracker-info {
-    display: flex;
-    align-items: center;
-}
-
-.sticky-tracker-info span {
-    font-size: 1rem;
-    font-weight: 500;
-}
-
-.sticky-tracker-info .act-number {
-    font-size: 1.25rem;
-    font-weight: bold;
-    margin-left: 0.5rem;
-}
-
-.sticky-tracker-info .act-title {
-    margin-left: 0.5rem;
-    font-style: italic;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 150px;
-}
-
-.sticky-tracker .controls button {
-    background-color: rgba(255, 255, 255, 0.2);
-    color: white;
-    border: 1px solid white;
-    border-radius: 50%;
-    width: 2rem;
-    height: 2rem;
-    font-size: 1rem;
-    line-height: 1;
-    cursor: pointer;
-    margin: 0 0.25rem;
-    transition: background-color 0.2s;
-}
-
-.sticky-tracker .controls button:hover {
-    background-color: rgba(255, 255, 255, 0.4);
-}
-
-
-/* --- Form Elements --- */
-select {
-    width: 100%;
-    padding: 0.75rem;
-    border: 1px solid #d1d5db;
-    border-radius: 0.5rem;
-    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-    background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>');
-    background-position: right 0.5rem center;
-    background-repeat: no-repeat;
-    background-size: 1.5em 1.5em;
-    padding-right: 2.5rem;
-}
-
-.search-view input {
-    width: 100%;
-    padding: 0.75rem;
-    border: 1px solid #d1d5db;
-    border-radius: 0.5rem;
-    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-    margin-bottom: 1rem;
-    box-sizing: border-box;
-}
-
-/* --- Favorites Section --- */
-.favorites-section {
-    margin-bottom: 1rem;
-    border: 1px solid #e5e7eb;
-    border-radius: 0.5rem;
-    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-    overflow: hidden;
-    background-color: #ffffff;
-}
-
-.favorites-toggle {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0.75rem;
-    background-color: transparent;
-    border: none;
-    cursor: pointer;
-    font-size: 1.125rem;
-    font-weight: 600;
-    color: inherit;
-}
-
-.favorites-toggle:hover {
-    background-color: #f9fafb;
-}
-
-.favorites-content {
-    padding: 0.75rem;
-    border-top: 1px solid #e5e7eb;
-}
-
-.favorite-item {
-    padding: 0.75rem;
-    background-color: #f9fafb;
-    border-radius: 0.5rem;
-    margin-bottom: 0.75rem;
-}
-
-.favorite-item:last-child {
-    margin-bottom: 0;
-}
-
-.favorite-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.favorite-header h3 {
-    font-weight: bold;
-    margin: 0;
-}
-
-.favorite-header button {
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 0;
-}
-
-.favorite-acts {
-    font-size: 0.875rem;
-    color: #4b5563;
-    margin-top: 0.25rem;
-}
-
-.favorite-acts div {
-    margin-top: 0.25rem;
-}
-
-
-/* --- Views (Program & Search) --- */
-.program-view h2, .search-view h2 {
-    font-size: 1.5rem;
-    font-weight: bold;
-    margin-bottom: 0.75rem;
-}
-
-.act-card {
-    padding: 0.75rem;
-    border-radius: 0.5rem;
-    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-    margin-bottom: 0.75rem;
-    transition: all 0.2s;
-    background-color: #ffffff;
-    border: 1px solid #e5e7eb;
-}
-
-.act-card.favorite {
-    border: 2px solid #ec4899;
-    background-color: #fdf2f8;
-}
-
-.act-card.no-performers {
-    background-color: #fefce8;
-    opacity: 0.8;
-}
-
-.act-card.current-act {
-    border: 3px solid #db2777;
-    transform: scale(1.02);
-}
-
-.act-card p {
-    font-weight: bold;
-    margin: 0;
-}
-
-.act-card .performers {
-    font-size: 0.875rem;
-    margin-top: 0.25rem;
-    color: #374151;
-}
-
-/* --- Search View Specifics --- */
-.search-result-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.search-result-item {
-    padding: 0.75rem;
-    background-color: #ffffff;
-    border-radius: 0.5rem;
-    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-    border: 1px solid #e5e7eb;
-    margin-bottom: 0.75rem;
-}
-
-.search-result-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-}
-
-.search-result-header h3 {
-     font-weight: bold;
-     margin: 0;
-}
-
-.search-result-header button {
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 0;
-}
-
-/* --- Bottom Navigation --- */
+/* Bottom nav adjustments */
 .bottom-nav {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background-color: #ffffff;
-    border-top: 1px solid #e5e7eb;
-    box-shadow: 0 -1px 3px 0 rgba(0, 0, 0, 0.1);
-    max-width: 640px;
-    margin: 0 auto;
-    display: flex;
-    justify-content: space-around;
+    border-top: 1px solid var(--border-light);
+    background-color: var(--surface-light) !important; /* Use important to override Bootstrap */
 }
 
-.bottom-nav button {
-    flex: 1;
-    padding: 0.5rem;
-    text-align: center;
-    background: none;
+.bottom-nav .btn {
+    border-radius: 0.5rem;
     border: none;
-    cursor: pointer;
-    border-top: 2px solid transparent;
-    transition: all 0.2s;
-    color: #6b7280;
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
 }
 
-.bottom-nav button.active {
-    color: #db2777;
-    border-top-color: #db2777;
+.bottom-nav .btn.active {
+    color: var(--primary-color);
+    background-color: rgba(var(--primary-rgb), 0.1); /* Use a highlight color */
 }
 
-.bottom-nav .icon-container {
-    margin: 0 auto;
+/* Custom Focus Outline for Bootstrap Components */
+.form-select:focus,
+.accordion-button:focus {
+    border-color: var(--primary-light);
+    box-shadow: 0 0 0 0.25rem rgba(var(--primary-rgb), 0.25);
 }
 
-.bottom-nav span {
-    font-size: 0.7rem; /* Adjusted for 4 tabs */
-    display: block;
+/* Accordion Button Customization */
+.accordion-button {
+    color: var(--text-dark);
 }
-
-/* --- Icon Styles --- */
-.icon-container {
-    width: 1.5rem;
-    height: 1.5rem;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.25rem;
+.accordion-button:not(.collapsed) {
+    color: var(--primary-color);
+    background-color: rgba(var(--primary-rgb), 0.05);
 }
-
-.favorites-toggle .icon-container {
-    transition: transform 0.2s;
-}
-
-.favorites-toggle.expanded .icon-container {
-    transform: rotate(180deg);
+.accordion-button:not(.collapsed)::after {
+    --bs-accordion-btn-icon: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23db2777'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
 }
 
 
-/* --- Dark Theme --- */
-body.dark {
-    background-color: #111827;
-    color: #e5e7eb;
+/* Dark Theme Overrides */
+[data-bs-theme="dark"] {
+    --bs-body-color: var(--text-light);
+    --bs-body-bg: var(--bg-dark);
+    --bs-border-color: var(--border-dark);
 }
 
-body.dark .header p, 
-body.dark .favorite-acts,
-body.dark .performers {
+[data-bs-theme="dark"] .form-select,
+[data-bs-theme="dark"] .form-control {
+    background-color: var(--surface-dark);
+    color: var(--text-light);
+}
+
+[data-bs-theme="dark"] .accordion-button {
+    background-color: var(--surface-dark);
+    color: var(--text-light);
+}
+
+[data-bs-theme="dark"] .accordion-button::after {
+    --bs-accordion-btn-icon: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23f9fafb'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
+}
+
+[data-bs-theme="dark"] .accordion-button:not(.collapsed) {
+    color: var(--primary-light);
+    background-color: rgba(249, 168, 212, 0.1);
+}
+
+[data-bs-theme="dark"] .accordion-button:not(.collapsed)::after {
+    --bs-accordion-btn-icon: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23f9a8d4'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
+}
+
+[data-bs-theme="dark"] .list-group-item {
+     background-color: var(--surface-dark);
+}
+
+[data-bs-theme="dark"] .bottom-nav {
+    background-color: var(--surface-dark) !important;
+    border-top-color: var(--border-dark);
+}
+
+[data-bs-theme="dark"] .bottom-nav .btn {
     color: #9ca3af;
 }
 
-body.dark select, 
-body.dark .search-view input {
-    background-color: #1f2937;
-    border-color: #4b5563;
-    color: #e5e7eb;
+[data-bs-theme="dark"] .bottom-nav .btn.active {
+    color: var(--primary-light);
+    background-color: rgba(249, 168, 212, 0.15); 
 }
 
-body.dark select {
-    background-image: url("data:image/svg+xml;charset=UTF-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%23d1d5db'><path fill-rule='evenodd' d='M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z' clip-rule='evenodd' /></svg>");
+[data-bs-theme="dark"] .act-card.favorite {
+    border-left: 5px solid var(--primary-light);
 }
 
-body.dark .favorites-section,
-body.dark .act-card,
-body.dark .search-result-item {
-    background-color: #1f2937;
-    border-color: #4b5563;
+[data-bs-theme="dark"] .act-card.current-act {
+    border: 3px solid var(--primary-light);
 }
 
-body.dark .favorites-toggle {
-    color: #e5e7eb;
+/* --- Settings Page Buttons --- */
+.btn-group .btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+[data-bs-theme="dark"] .btn-group .btn-primary {
+    background-color: var(--primary-light);
+    border-color: var(--primary-light);
+    color: var(--text-dark);
 }
 
-body.dark .favorites-toggle:hover {
-    background-color: #374151;
+
+/* --- Favorite Star Icon --- */
+.favorite-icon {
+    color: var(--primary-color);
+}
+.favorite-icon.inactive {
+    color: #6c757d;
 }
 
-body.dark .favorites-content {
-    border-top-color: #4b5563;
+[data-bs-theme="dark"] .favorite-icon {
+    color: var(--primary-light);
 }
-
-body.dark .favorite-item {
-    background-color: #374151;
-}
-
-body.dark .act-card.favorite {
-    background-color: #312028;
-}
-
-body.dark .act-card.no-performers {
-    background-color: #423d1d;
-}
-
-body.dark .bottom-nav {
-    background-color: #1f2937;
-    border-top-color: #4b5563;
-}
-
-body.dark .bottom-nav button {
-    color: #9ca3af;
-}
-
-body.dark .bottom-nav button.active {
-    color: #f9a8d4;
-    border-top-color: #f9a8d4;
-}
-
-body.dark .theme-switcher {
-    background-color: #374151;
-}
-
-body.dark .theme-switcher button {
-    color: #d1d5db;
-}
-
-body.dark .theme-switcher button.active {
-    background-color: #4b5563;
-    color: #f9fafb;
-}
-
-body.dark .signin-button {
-    color: #d1d5db;
-    border-color: #4b5563;
-}
-body.dark .signin-button.large {
-    background-color: #374151;
-}
-body.dark .settings-section h3 {
+[data-bs-theme="dark"] .favorite-icon.inactive {
     color: #9ca3af;
 }
