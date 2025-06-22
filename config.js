@@ -11,4 +11,4 @@ const firebaseConfig = {
 
 // --- Authorized Users ---
 // Add the email addresses of users who are allowed to control the tracker.
-const authorizedUsers = ["jonny5v@gmail.com", "user2@example.com"];
+const authorizedUsers = ["jonny5v@gmail.com", "bdwill@gmail.com", "user2@example.com"];
