@@ -16,7 +16,7 @@
         crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <!-- External Stylesheet -->
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="style.css" id="main-css"/>
 </head>
 
 <body>
@@ -50,7 +50,31 @@
     <script src="config.js"></script>
     
     <!-- External App Script -->
-    <script type="text/babel" src="app.js"></script>
+    <script type="text/babel" src="app.js" id="main-js"></script>
+
+    <!-- Dynamic Versioning Script -->
+    <script>
+      (function() {
+        // Use the version from config.js if it exists, otherwise use a timestamp
+        const version = typeof APP_VERSION !== 'undefined' ? APP_VERSION : new Date().getTime();
+        
+        const cssLink = document.getElementById('main-css');
+        if (cssLink) {
+          cssLink.href = `style.css?v=${version}`;
+        }
+
+        // We need to handle the babel script differently.
+        // Babel fetches the script source, so we'll re-create the script tag.
+        const babelScript = document.getElementById('main-js');
+        if (babelScript) {
+            const newScript = document.createElement('script');
+            newScript.type = 'text/babel';
+            newScript.src = `app.js?v=${version}`;
+            newScript.id = 'main-js';
+            babelScript.parentNode.replaceChild(newScript, babelScript);
+        }
+      })();
+    </script>
     
     <!-- Service Worker Registration Script -->
     <script>
