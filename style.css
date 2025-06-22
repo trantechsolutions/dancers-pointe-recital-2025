@@ -33,24 +33,37 @@ body {
     margin-top: 0;
 }
 
-/* --- Theme Switcher --- */
+/* --- Settings View --- */
+.settings-view h2 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 1.5rem;
+}
+.settings-section {
+    margin-bottom: 2rem;
+}
+.settings-section h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+    color: #4b5563;
+}
 .theme-switcher {
-    position: absolute;
-    top: 0.5rem;
-    left: 0.5rem;
     display: flex;
     background-color: #e5e7eb;
     border-radius: 9999px;
     padding: 0.25rem;
+    width: fit-content;
 }
 
 .theme-switcher button {
     background: none;
     border: none;
     cursor: pointer;
-    padding: 0.25rem 0.5rem;
+    padding: 0.5rem 1rem;
     color: #4b5563;
-    font-size: 0.75rem;
+    font-size: 0.875rem;
+    font-weight: 500;
     border-radius: 9999px;
     transition: background-color 0.2s, color 0.2s;
 }
@@ -60,22 +73,16 @@ body {
     color: #1f2937;
     box-shadow: 0 1px 3px rgba(0,0,0,0.1);
 }
-
-/* --- Sign-In Button --- */
-.signin-button {
-    background: none;
-    border: 1px solid #d1d5db;
-    color: #4b5563;
-    padding: 0.25rem 0.75rem;
-    font-size: 0.75rem;
-    border-radius: 0.5rem;
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    position: absolute;
-    top: 0.5rem;
-    right: 0.5rem;
+.signin-button.large {
+    width: 100%;
+    padding: 0.75rem;
+    font-size: 1rem;
+    background-color: #4285F4;
+    color: white;
+    border: none;
+}
+.signin-button.large:hover {
+     background-color: #357ae8;
 }
 
 /* --- Admin Controls --- */
@@ -167,7 +174,7 @@ body {
     color: white;
     padding: 0.5rem 1rem;
     display: flex;
-    justify-content: space-between; /* Changed for new layout */
+    justify-content: space-between;
     align-items: center;
     box-shadow: 0 2px 5px rgba(0,0,0,0.2);
     z-index: 1000;
@@ -271,7 +278,7 @@ select {
     cursor: pointer;
     font-size: 1.125rem;
     font-weight: 600;
-    color: inherit; /* Inherit color from parent */
+    color: inherit;
 }
 
 .favorites-toggle:hover {
@@ -417,7 +424,7 @@ select {
 
 .bottom-nav button {
     flex: 1;
-    padding: 0.75rem;
+    padding: 0.5rem;
     text-align: center;
     background: none;
     border: none;
@@ -437,7 +444,7 @@ select {
 }
 
 .bottom-nav span {
-    font-size: 0.75rem;
+    font-size: 0.7rem; /* Adjusted for 4 tabs */
     display: block;
 }
 
@@ -463,13 +470,13 @@ select {
 /* --- Dark Theme --- */
 body.dark {
     background-color: #111827;
-    color: #e5e7eb; /* Brighter base text color for readability */
+    color: #e5e7eb;
 }
 
 body.dark .header p, 
 body.dark .favorite-acts,
 body.dark .performers {
-    color: #9ca3af; /* Softer text for secondary info */
+    color: #9ca3af;
 }
 
 body.dark select, 
@@ -491,7 +498,7 @@ body.dark .search-result-item {
 }
 
 body.dark .favorites-toggle {
-    color: #e5e7eb; /* Explicitly set font color for dark mode */
+    color: #e5e7eb;
 }
 
 body.dark .favorites-toggle:hover {
@@ -544,4 +551,10 @@ body.dark .theme-switcher button.active {
 body.dark .signin-button {
     color: #d1d5db;
     border-color: #4b5563;
+}
+body.dark .signin-button.large {
+    background-color: #374151;
+}
+body.dark .settings-section h3 {
+    color: #9ca3af;
 }

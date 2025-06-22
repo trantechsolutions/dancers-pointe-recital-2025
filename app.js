@@ -67,7 +67,7 @@ function App() {
     const [isTrackerSticky, setIsTrackerSticky] = useState(false);
     const [theme, setTheme] = useState(localStorage.getItem('theme') || 'system');
     
-    const touchStartRef = useRef(0);
+    const touchStartRef = useRef({ x: 0, y: 0 });
     const trackerRef = useRef(null);
 
     // --- Theme Management ---
@@ -247,7 +247,7 @@ function App() {
         const deltaY = e.changedTouches[0].clientY - touchStartRef.current.y;
         
         if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 50) {
-            const tabs = ['program', 'searchActs', 'searchDancers'];
+            const tabs = ['program', 'searchActs', 'searchDancers', 'settings'];
             const currentIndex = tabs.indexOf(activeTab);
             if (deltaX < 0) { // Swipe Left
                 const nextIndex = (currentIndex + 1) % tabs.length;
@@ -263,17 +263,25 @@ function App() {
     if (loading) return <div>Loading...</div>;
     if (error) return <div>Error: {error}</div>;
 
-    const renderActiveTab = () => {
-        switch (activeTab) {
-            case 'program':
-                return <ProgramView showData={showData} favorites={favorites} currentAct={currentAct} />;
-            case 'searchActs':
-                return <SearchActView search={actSearch} setSearch={setActSearch} results={actSearchResults} favorites={favorites} currentAct={currentAct} />;
-            case 'searchDancers':
-                 return <SearchDancerView search={dancerSearch} setSearch={setDancerSearch} results={dancerSearchResults} favorites={favorites} toggleFavorite={toggleFavorite} />;
-            default:
-                return <ProgramView showData={showData} favorites={favorites} currentAct={currentAct} />;
+    const renderMainContent = () => {
+        if (activeTab === 'settings') {
+            return <SettingsView theme={theme} setTheme={setTheme} user={user} handleSignIn={handleSignIn} handleSignOut={handleSignOut} />;
         }
+
+        if (selectedShow) {
+            switch (activeTab) {
+                case 'program':
+                    return <ProgramView showData={showData} favorites={favorites} currentAct={currentAct} />;
+                case 'searchActs':
+                    return <SearchActView search={actSearch} setSearch={setActSearch} results={actSearchResults} favorites={favorites} currentAct={currentAct} />;
+                case 'searchDancers':
+                     return <SearchDancerView search={dancerSearch} setSearch={setDancerSearch} results={dancerSearchResults} favorites={favorites} toggleFavorite={toggleFavorite} />;
+                default:
+                    return null;
+            }
+        }
+        
+        return <p style={{textAlign: 'center', color: '#6b7280', marginTop: '2rem'}}>Please select a show to continue.</p>;
     };
 
     return (
@@ -295,23 +303,8 @@ function App() {
             )}
             <div className="container" onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
                 <header className="header">
-                    <div className="theme-switcher">
-                        <button onClick={() => setTheme('light')} className={theme === 'light' ? 'active' : ''}>Light</button>
-                        <button onClick={() => setTheme('dark')} className={theme === 'dark' ? 'active' : ''}>Dark</button>
-                        <button onClick={() => setTheme('system')} className={theme === 'system' ? 'active' : ''}>System</button>
-                    </div>
                     <h1>Dancer's Pointe</h1>
                     <p>Recital Program</p>
-                    {user && user.isAnonymous && (
-                        <button className="signin-button" onClick={handleSignIn}>
-                            <Icon name="google" type="fab" /> Admin
-                        </button>
-                    )}
-                    {user && !user.isAnonymous && (
-                        <button onClick={handleSignOut} className="signin-button">
-                            Sign Out
-                        </button>
-                    )}
                 </header>
                 <main>
                     <div style={{ marginBottom: '1rem' }}>
@@ -320,7 +313,7 @@ function App() {
                             {shows.map(show => <option key={show.value} value={show.value}>{show.label}</option>)}
                         </select>
                     </div>
-                    {selectedShow && (
+                     {selectedShow && activeTab !== 'settings' && (
                         <>
                            {isAuthorized && (
                                <div className="admin-controls">
@@ -332,8 +325,7 @@ function App() {
                                    </button>
                                </div>
                            )}
-
-                            {currentAct.isTracking && (
+                           {currentAct.isTracking && (
                                 <div className="now-performing" ref={trackerRef}>
                                     <h2>Now Performing</h2>
                                     <div className="act-number">#{currentAct.number}</div>
@@ -371,9 +363,9 @@ function App() {
                                     </div>
                                 )}
                             </div>
-                            {renderActiveTab()}
                         </>
                     )}
+                    {renderMainContent()}
                 </main>
                 <nav className="bottom-nav">
                     <button onClick={() => setActiveTab('program')} className={activeTab === 'program' ? 'active' : ''}>
@@ -388,6 +380,10 @@ function App() {
                         <div className="icon-container"><Icon name="user-group" /></div>
                         <span>Dancers</span>
                     </button>
+                    <button onClick={() => setActiveTab('settings')} className={activeTab === 'settings' ? 'active' : ''}>
+                        <div className="icon-container"><Icon name="gear" /></div>
+                        <span>Settings</span>
+                    </button>
                 </nav>
             </div>
         </>
@@ -395,7 +391,7 @@ function App() {
 }
 
 function ProgramView({ showData, favorites, currentAct }) {
-    if (!showData) return <p style={{textAlign: 'center', color: '#6b7280', marginTop: '2rem'}}>Select a show to see the program.</p>;
+    if (!showData) return null;
     return (
         <div className="program-view">
             <h2>Program</h2>
@@ -467,6 +463,34 @@ function SearchDancerView({ search, setSearch, results, favorites, toggleFavorit
                     })}
                 </ul>
             )}
+        </div>
+    );
+}
+
+function SettingsView({ theme, setTheme, user, handleSignIn, handleSignOut }) {
+    return (
+        <div className="settings-view">
+            <h2>Settings</h2>
+            <div className="settings-section">
+                <h3>Theme</h3>
+                <div className="theme-switcher">
+                    <button onClick={() => setTheme('light')} className={theme === 'light' ? 'active' : ''}>Light</button>
+                    <button onClick={() => setTheme('dark')} className={theme === 'dark' ? 'active' : ''}>Dark</button>
+                    <button onClick={() => setTheme('system')} className={theme === 'system' ? 'active' : ''}>System</button>
+                </div>
+            </div>
+            <div className="settings-section">
+                <h3>Account</h3>
+                {user && user.isAnonymous ? (
+                    <button className="signin-button large" onClick={handleSignIn}>
+                        <Icon name="google" type="fab" /> Admin Sign-In
+                    </button>
+                ) : (
+                    <button onClick={handleSignOut} className="signin-button large">
+                        Sign Out
+                    </button>
+                )}
+            </div>
         </div>
     );
 }
